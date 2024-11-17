@@ -38,13 +38,14 @@ app.get('/posts', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
+app.get('/posts/create', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'create-post.html'));
+});
+
 app.get('/posts/:postId', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'post-detail.html'));
 });
 
-app.get('/posts/create', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'create-post.html'));
-});
 
 app.get('/posts/post-id/edit', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'edit-post.html'));
