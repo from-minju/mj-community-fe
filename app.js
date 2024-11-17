@@ -38,7 +38,7 @@ app.get('/posts', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-app.get('/posts/post-id', (req, res) => {
+app.get('/posts/:postId', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'post-detail.html'));
 });
 

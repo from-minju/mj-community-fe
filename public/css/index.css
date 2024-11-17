@@ -102,4 +102,5 @@ hr {
     height: 36px;
     position: relative;
     width: 36px;
+    object-fit: cover;
 }

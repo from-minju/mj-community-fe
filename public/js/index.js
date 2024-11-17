@@ -1,5 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+  function formatCnt(cnt){
+    if(cnt >= 1000) return `${Math.floor(cnt/1000)}k`;
+    return `${cnt}`;
+  }
+
   /**
    * 게시물 데이터 가져오기
    */
@@ -40,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // 컨테이너 구성하기
         postTitleArea.textContent = post.title;
-        leftArea.innerHTML = `좋아요 <span>${post.likes}</span>  댓글 <span>${post.comments}</span>  조회수 <span>${post.views}</span>`;
+        leftArea.innerHTML = `좋아요 <span>${formatCnt(post.likes)}</span>  댓글 <span>${formatCnt(post.comments)}</span>  조회수 <span>${formatCnt(post.views)}</span>`;
         rightArea.textContent = post.date;
         postUserProfile.src = post.profileImg;
         postWriterNameArea.textContent = post.author;
