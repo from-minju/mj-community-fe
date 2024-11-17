@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="kr">
+
+<head>
+    <title>아무 말 대잔치</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/login.css" />
+</head>
+
+<body>
+    <header id="header">
+        <div class="header">
+            <div class="headerContent">
+                <div class="headerLeft">
+                </div>
+                <a href="/posts" class="headerText">아무 말 대잔치</a>
+                <div class="headerProfile">
+                    <div class="userProfile">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <article>
+        <div class="wrap2">
+            <h1>로그인</h1>
+
+            <form action="/auth/login" accept-charset="utf-8" name="login" method="post">
+                <div class="input_box">
+                    <label for="id" class="text_label" id="id_label">이메일</label>
+                    <input type="email" id="email" name="email" maxlength="41" title="이메일" />
+                    <div class="helper_text" id="emailHelperText">* helper text</div>
+                </div>
+                <div class="input_box">
+                    <label for="pw" class="text_label" id="pw_label">비밀번호</label>
+                    <input type="password" id="password" name="password" maxlength="41" title="비밀번호" />
+                    <div class="helper_text" id="passwordHelperText">* helper text</div>
+                </div>
+
+
+                <div class="btn_wrap">
+                    <button type="submit" id="loginBtn" class="btn_login">
+                        로그인
+                    </button>
+
+                    <div class="btn_register">
+                        <a href="/auth/signup" id="btn_register" class="btn_register">회원가입</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </article>
+
+    <script src="/js/login.js"></script>
+
+</body>
+
+</html>

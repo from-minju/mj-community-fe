@@ -1,0 +1,112 @@
+:root {
+    --maincolor: #aca0eb; 
+    --hovercolor: #7f6aee;
+    --darkgray: #d9d9d9;
+}
+
+.wrap2 {
+    width: 360px;
+    margin-top: 40px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrap2 h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+input {
+    height: 30px;
+    width: calc(100% - 20px);
+    padding: 1px 10px;
+    font-size: 15px;
+    outline: none;
+}
+
+.helperText {
+    color: red;
+    margin: 4px 2px;
+    width: calc(100% - 10px);
+    height: 19px;
+    font-weight: normal;
+    font-size: 12px;
+}
+
+.submit {
+    width: 100%;
+    background-color: var(--maincolor);
+    height: 37px;
+    font-size: 16px;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+a {
+    padding: 10px;
+    font-size: 14px;
+    text-decoration: none;
+    color: black;
+    text-align: center;
+
+}
+
+.profileContainer {
+    margin-bottom: 20px;
+}
+
+.addImageArea {
+    height: 150px;
+    width: 150px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.addImageHelperArea {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: none;
+    background-color: #c4c4c4;
+    background-size: cover;
+    /* 이미지 겹치게 하기 */
+    position: absolute;
+    z-index: 2;
+}
+
+#profileImagePreview {
+    display: none;
+    height: 150px;
+    width: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 auto;
+    background-color: #c4c4c4;
+    /* 이미지 겹치게 하기 */
+    position: absolute;
+    z-index: 3;
+}
+
+#plusImage {
+    object-fit: cover;
+    width: 50px;
+}
+
+

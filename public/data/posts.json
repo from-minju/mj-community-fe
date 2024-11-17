@@ -1,0 +1,74 @@
+[
+    {
+        "postId": 1,
+        "title": "제목입니다1",
+        "content": "본문입니다아아아아아아아아아아아ㅏㅏㅏㅏㅏㅏ아아아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
+        "contentImg": "/images/bunny.jpg",
+        "date": "2024-11-08 02:06:30",
+        "likes": 123,
+        "comments": 456,
+        "views": 500,
+        "author": "닉네임못정함",
+        "profileImg": "/images/bunny.jpg"
+    },
+    {
+        "postId": 2,
+        "title": "나는 지금 프로젝트중~",
+        "content": "발이 시려워...ㅠㅠㅠㅠㅠㅠ</br>날씨가 너무 추워졌어ㅠㅠㅠㅠㅜㅜㅜㅜㅠㅠㅜㅠㅜㅠㅜㅠ",
+        "contentImg": "/images/bunny.jpg",
+        "date": "2024-11-08 02:10:40",
+        "likes": 30,
+        "comments": 5000,
+        "views": 10000,
+        "author": "수족냉증",
+        "profileImg": "/images/bunny.jpg"
+    },
+    {
+        "postId": 3,
+        "title": "안녕안녕안녕안녕",
+        "content": "내일은 강의듣는 날~~~~~",
+        "contentImg": "/images/bunny.jpg",
+        "date": "2023-06-18 12:14:43",
+        "likes": 6000,
+        "comments": 700,
+        "views": 1000,
+        "author": "누구게",
+        "profileImg": "/images/bunny.jpg"
+    },
+    {
+        "postId": 4,
+        "title": "제목입니다1",
+        "content": "본문입니다아아아아아아아아아아아ㅏㅏㅏㅏㅏㅏ아아아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
+        "contentImg": "/images/bunny.jpg",
+        "date": "2024-11-08 02:06:30",
+        "likes": 123,
+        "comments": 456,
+        "views": 500,
+        "author": "닉네임못정함",
+        "profileImg": "/images/bunny.jpg"
+    },
+    {
+        "postId": 5,
+        "title": "제목입니다1",
+        "content": "본문입니다아아아아아아아아아아아ㅏㅏㅏㅏㅏㅏ아아아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
+        "contentImg": "/images/bunny.jpg",
+        "date": "2024-11-08 02:06:30",
+        "likes": 123,
+        "comments": 456,
+        "views": 500,
+        "author": "닉네임못정함",
+        "profileImg": "/images/bunny.jpg"
+    },
+    {
+        "postId": 6,
+        "title": "제목입니다1",
+        "content": "본문입니다아아아아아아아아아아아ㅏㅏㅏㅏㅏㅏ아아아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
+        "contentImg": "/images/bunny.jpg",
+        "date": "2024-11-08 02:06:30",
+        "likes": 123,
+        "comments": 456,
+        "views": 500,
+        "author": "닉네임못정함",
+        "profileImg": "/images/bunny.jpg"
+    }
+]

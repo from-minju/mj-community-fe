@@ -1,0 +1,57 @@
+.modalOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);/* 반투명 배경 */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    width: 408px;
+    height: 242px;
+    border-radius: 12px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.modalTitle {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 45px;
+}
+
+.modalContent {
+    font-size: 20px;
+    font-weight: 400;
+    margin-top: 30px;
+}
+
+.btnContainer {
+    margin: 40px 0px;
+}
+
+.optionA, 
+.optionB {
+    width: 127px;
+    height: 44px;
+    font-size: 20px;
+    border-radius: 12px;
+    margin: 0px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.optionA{
+    background-color: #242424;
+    color: white;
+}
+
+.optionB{
+    background-color: #c4a5fb;
+}

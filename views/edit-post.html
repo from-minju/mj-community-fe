@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>아무 말 대잔치</title>
+        <link rel="stylesheet" href="/css/main.css" />
+        <link rel="stylesheet" href="/css/edit-post.css" />
+    </head>
+
+    <body>
+        <header id="header">
+            <div class="header">
+                <div class="headerContent">
+                    <div class="headerLeft">
+                        <img id="headerLeft" src="/images/angle-left.png" class="headerLeft" alt="headerLeft" onclick="history.back()"/>
+                    </div>
+                    <a href="/posts" class="headerText">아무 말 대잔치</a>
+                    <div class="headerProfile">
+                        <div class="userProfile">
+                            <img id="userProfileImg" src="/images/circle-user.png" class="userProfile" alt="userProfile" />
+                            <div class="dropdown" id="dropdown">
+                                <a href="/users/user-id/edit-profile" class="dropdownOption">회원정보수정</a>
+                                <a href="/users/user-id/change-password" class="dropdownOption">비밀번호수정</a>
+                                <a href="/" class="dropdownOption">로그아웃</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <article>
+            <div class="wrap">
+
+                <div class="postWriteTitle">게시글 수정</div>
+
+                <div class="postWriteContainer">
+                    <p>제목*</p>
+                    <hr><input id="titleInput" class="titleInputBox" placeholder="제목을 입력해주세요. (최대 26글자)"><hr>
+                    <div id="titleHelperText" class="helperText"></div>
+
+                    <p>내용*</p>
+                    <hr><textarea id="contentInput" class="contentInputBox" placeholder="내용을 입력해주세요."></textarea><hr>
+                    <div id="contentHelperText" class="helperText"></div>
+
+                    <p>이미지</p>
+                    <div>
+                        <input type="file" id="postWriteImage" accept="image/png, image/jpeg">
+                    </div>
+                </div>
+
+                <button id="createPostBtn" class="submitBtn">완료</button>
+
+            </div>
+        </article>
+
+        <script src="/js/header.js"></script>
+        <script src="/js/edit-post.js"></script>
+
+    </body>
+</html>

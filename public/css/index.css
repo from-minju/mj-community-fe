@@ -1,0 +1,105 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+:root {
+    --maincolor: #aca0eb; 
+    --hovercolor: #7f6aee;
+    --darkgray: #d9d9d9;
+}
+
+div {
+    display: block;
+}
+
+.introContainer{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: space-between;
+    margin: 40px 0;
+    font-size: 24px;
+    line-height: 31.2px;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.buttonContainer {
+    margin-left: auto; /* buttonContainer를 오른쪽으로 밀기 */
+}
+
+.createPostBtn {
+    background-color: var(--maincolor);
+    border-radius: 16px;
+    color: white;
+    height: 44px;
+    width: 130px;
+    border: none;
+    font-size: 16px;
+}
+
+.createPostBtn:hover {
+    background-color: var(--hovercolor);
+}
+
+.postsContainer {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.postContainer {
+    background-color: #FFFFFF;
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    margin: 12px 0px;
+    padding-top: 20px;
+    cursor: pointer;
+}
+
+.postTitleArea,
+.postMetaArea,
+.postWriterArea {
+    margin: 0px 20px;
+}
+
+.postTitleArea {
+    font-size: 24px;
+    font-weight: 700;
+    white-space: nowrap; /* 줄바꿈 방지 */
+    overflow: hidden; /* 넘치는 부분 숨김 */
+    text-overflow: ellipsis; /* 생략기호추가 */
+    margin-bottom: 15px;
+}
+
+.postMetaArea {
+    display: flex;   
+    justify-content: space-between; /* 좌우 공간을 균등하게 배분, 좌측우측정렬 */
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+hr {
+    margin: 0px;
+}
+
+.postWriterArea {
+    display: flex;
+    align-items: center; 
+    font-size: 15px;
+    font-weight: 700;
+    padding-top: 10px;
+    padding-bottom: 13px;
+}
+
+.postWriterArea p {
+    padding-left: 13px;
+}
+
+.postUserProfile {
+    background-color: var(--darkgray);
+    background-size: cover;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 36px;
+    position: relative;
+    width: 36px;
+}

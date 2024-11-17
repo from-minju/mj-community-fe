@@ -1,0 +1,178 @@
+:root {
+    --maincolor: #aca0eb; 
+    --hovercolor: #7f6aee;
+    --lightgray: #f4f5f7; 
+    --darkgray: #d9d9d9;
+}
+
+.postContainer {
+    padding-top: 30px;    
+    display: flex;
+    flex-direction: column;
+    
+}
+
+hr {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.metaContainer {
+    display: flex;
+    justify-content: space-between; /* 좌우 공간을 균등하게 배분, 좌측우측정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-top: 15px;
+    padding: 0px 10px;
+}
+
+.metaLeftContainer {
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+}
+
+.postTitle {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: 'Pretendard';
+    height: 31.2px;
+    padding: 0px 10px;
+}
+
+.writerArea {
+    display: flex;
+    align-items: center; 
+    font-size: 15px;
+    font-weight: 700;
+
+}
+
+.writerArea p {
+    font-size: 15px;
+    padding-left: 13px;
+}
+
+.userProfile {
+    background-color: #d9d9d9;
+    background-size: cover;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 36px;
+    position: relative;
+    width: 36px;
+}
+
+.createdTime {
+    font-size: 14px;
+    padding-left: 20px;
+}
+
+.editRemoveBtn {
+    background-color: var(--lightgray);
+    border: 1px solid var(--maincolor);
+    border-radius: 8px;
+    box-shadow: none;
+    padding: 5px 10px;
+    outline: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.postImageContainer {
+    width: 100%;
+    display: flex;
+    align-items: center; /* 가로 방향 가운데 정렬 */
+    justify-content: center; /* 세로 방향 가운데 정렬 */
+    margin-bottom: 20px;
+}
+
+.postImage {
+    width: 95%;
+    background-color: var(--darkgray);
+    height: 300px;
+    border: none;
+}
+
+.postContent {
+    margin-bottom: 30px;
+}
+
+.reactionContainer {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.reactionData {
+    background-color: var(--darkgray);
+    border-radius: 16px;
+    width: 100px;
+    margin: 0px 10px;
+    padding: 10px 0px;
+
+}
+
+.reactionData p {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 4px 0px;
+}
+
+.reactionNum {
+    font-weight: 700;
+
+}
+
+.reactionName {
+    font-weight: 700;
+}
+
+.postBottomContainer {
+    width: 100%;
+    padding-bottom: 100px;
+}
+
+.writeCommentContainer {
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.writeCommentArea {
+    margin: 15px;
+    height: 100px;
+    text-align: left;
+    width: calc(100% - 36px);
+    border: none;
+    font-size: 15px;
+}
+
+.writeCommentContainer hr {
+    margin: 0px;
+}
+
+.writeCommentBtn {
+    background-color: var(--maincolor);
+    border: none;
+    border-radius: 16px;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 9px 0px;
+    width: 110px;
+    margin: 5px 13px 6px auto;
+}
+
+.commentsContainer {
+    padding: 0px 20px;
+}
+
+.commentContent{
+    padding-left: 56px;
+    font-size: 15px;
+}
+
