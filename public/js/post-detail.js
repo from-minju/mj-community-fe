@@ -1,3 +1,5 @@
+
+
 document.addEventListener("DOMContentLoaded", function () {
   const postId = Number(window.location.pathname.split("/").pop()); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
 
@@ -15,6 +17,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const okPostModalBtn = document.getElementById("okPostModal");
   const okCommentModalBtn = document.getElementById("okCommentModal");
+
+  const commentTextArea = document.getElementById("writeCommentArea");
+  const createCommentBtn = document.getElementById("writeCommentBtn");
+  
+
+  function getCurrentDate() {
+    let today = new Date();
+    today.setHours(today.getHours() + 9); // 미국시간 기준이니까 9를 더해주면 대한민국 시간됨
+    return today.toISOString().replace("T", " ").substring(0, 19); // 문자열로 바꿔주고 T를 빈칸으로 바꿔주면 yyyy-mm-dd hh:mm:ss 이런 형식 나옴
+  }
 
   // 게시물 수정
   function editPost() {
@@ -145,9 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       const response = await fetch("../data/comments.json");
       const data = await response.json();
-
-      const item = data.find((item) => item.postId === postId) || false; //find()의 결과가 없다면 false할당
-      const comments = item ? item.comments : false;
+      const comments = data[postId];
 
       if(comments){
         displayComments(comments);
@@ -160,12 +170,52 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function updateCreateCommentBtn(){
+    const commentValue = commentTextArea.value.trim();
+    if(commentValue){
+      createCommentBtn.disabled = false; 
+      createCommentBtn.style.backgroundColor = "#7f6aee";
+      createCommentBtn.style.cursor = "pointer";
+    }else{
+      createCommentBtn.disabled = true; 
+      createCommentBtn.style.backgroundColor = "#aca0eb";
+    }
+  }
+
+  // TODO: 댓글 등록
+  function createComment() {
+
+    console.log("댓글등록 버튼 클릭함.")
+
+    const commentValue = commentTextArea.value.trim();
+
+    if (!commentValue) return false;
+
+    const newComment = {
+      "commentId": 1,
+      "userId": 1,
+      "author": "mj",
+      "profileImg": "/images/bunny.jpeg",
+      "content": commentValue,
+      "createdAt": `${getCurrentDate()}`
+    }
+
+    // TODO: 새로운 댓글 json에 추가하고, 댓글목록 다시 fetch하기.
+
+  }
+
+
+
   fetchPost();
   fetchComments();
-
   
   editPostBtn.addEventListener("click", editPost);
   deletePostBtn.addEventListener("click", deletePost);
+
+  commentTextArea.addEventListener("input", updateCreateCommentBtn);
+  createCommentBtn.addEventListener("click", createComment);
+
+
 
   // editPostBtn.addEventListener("click", function () {
   //   window.location.href = "/posts/post-id/edit";

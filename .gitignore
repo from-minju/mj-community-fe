@@ -5,3 +5,6 @@ public/images
 test.html
 test.js
 test.json
+
+views/bookmarks.html
+public/js/bookmark.js
