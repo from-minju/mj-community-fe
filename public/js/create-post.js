@@ -49,12 +49,46 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
 
+    async function createPost() {
+        try{
+            const API_URL = `http://localhost:3000/posts`;
+            const postData = {
+                title: titleInput.value.trim(),
+                content: contentInput.value.trim(),
+                postImage: "" // TODO:
+            }
+
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
+            });
+
+            if(!response.ok){
+                const {message} = await response.json();
+                throw new Error(`Error ${response.status}: ${message || 'Unknown error'}`);
+            }
+
+            const {data: data} = await response.json();
+            const newPostId = data.postId;
+
+            window.location.href = `http://localhost:8000/posts/${newPostId}`;
+
+        }catch(error){
+            console.error('게시물 작성 실패');
+        }
+    };
+
+
     titleInput.addEventListener("input", updateTitleHelperText);
     contentInput.addEventListener("input", updateContentHelperText);
 
-    titleInput.addEventListener("input", updateCreatePostBtn);
-    contentInput.addEventListener("input", updateCreatePostBtn);
+    // titleInput.addEventListener("input", updateCreatePostBtn);
+    // contentInput.addEventListener("input", updateCreatePostBtn);
 
+    createPostBtn.addEventListener("click", createPost);
     
 });
 

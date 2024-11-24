@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
 
   function formatCnt(cnt){
@@ -10,8 +11,10 @@ document.addEventListener("DOMContentLoaded", function () {
    */
   async function fetchPosts() {
     try {
-      const response = await fetch("../data/posts.json");
-      const posts = await response.json();
+      const response = await fetch('http://localhost:3000/posts', {
+        method: "GET",
+      });
+      const {data: posts} = await response.json();
 
       const postsContainer = document.querySelector(".postsContainer");
       postsContainer.innerHTML = "";
@@ -46,9 +49,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // 컨테이너 구성하기
         postTitleArea.textContent = post.title;
         leftArea.innerHTML = `좋아요 <span>${formatCnt(post.likes)}</span>  댓글 <span>${formatCnt(post.comments)}</span>  조회수 <span>${formatCnt(post.views)}</span>`;
-        rightArea.textContent = post.date;
-        postUserProfile.src = post.profileImg;
-        postWriterNameArea.textContent = post.author;
+        rightArea.textContent = post.createdAt;
+        postUserProfile.src = post.profileImage;
+        postWriterNameArea.textContent = post.nickname;
 
         postMetaArea.append(leftArea, rightArea);
         postWriterArea.append(postUserProfile, postWriterNameArea);

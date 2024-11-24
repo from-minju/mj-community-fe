@@ -95,6 +95,7 @@ hr {
 
 .postContent {
     margin-bottom: 30px;
+    white-space: pre-wrap; /* 줄바꿈 문자 그대로 반영 */
 }
 
 .reactionContainer {

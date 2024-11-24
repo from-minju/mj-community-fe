@@ -1,7 +1,5 @@
-
-
 document.addEventListener("DOMContentLoaded", function () {
-  const postId = Number(window.location.pathname.split("/").pop()); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
+  const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
 
   const editPostBtn = document.getElementById("postEditBtn");
   const editCommentBtn = document.getElementById("editCommentBtn");
@@ -22,11 +20,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const createCommentBtn = document.getElementById("writeCommentBtn");
   
 
-  function getCurrentDate() {
-    let today = new Date();
-    today.setHours(today.getHours() + 9); // 미국시간 기준이니까 9를 더해주면 대한민국 시간됨
-    return today.toISOString().replace("T", " ").substring(0, 19); // 문자열로 바꿔주고 T를 빈칸으로 바꿔주면 yyyy-mm-dd hh:mm:ss 이런 형식 나옴
-  }
+  // function getCurrentDate() {
+  //   let today = new Date();
+  //   today.setHours(today.getHours() + 9); // 미국시간 기준이니까 9를 더해주면 대한민국 시간됨
+  //   return today.toISOString().replace("T", " ").substring(0, 19); // 문자열로 바꿔주고 T를 빈칸으로 바꿔주면 yyyy-mm-dd hh:mm:ss 이런 형식 나옴
+  // }
 
   // 게시물 수정
   function editPost() {
@@ -63,11 +61,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function displayPost(post) {
     document.querySelector(".postTitle").textContent = post.title;
-    document.getElementById("postWriterProfileImage").src = post.profileImg;
-    document.getElementById("postWriterName").textContent = post.author;
-    document.querySelector(".createdTime").textContent = post.date;
+    document.getElementById("postWriterProfileImage").src = post.profileImage;
+    document.getElementById("postWriterName").textContent = post.nickname;
+    document.querySelector(".createdTime").textContent = post.createdAt;
     document.querySelector(".postContent").innerHTML = post.content;
-    document.querySelector(".postImage").src = post.contentImg;
+    if(post.postImage.trim()){
+      document.querySelector(".postImage").src = post.postImage;
+    }else{
+      document.querySelector(".postImageContainer").style.display = "none";
+    }
     document.getElementById("likesCnt").textContent = formatCnt(post.likes);
     document.getElementById("viewsCnt").textContent = formatCnt(post.views);
     document.getElementById("commentsCnt").textContent = formatCnt(post.comments);
@@ -76,6 +78,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function displayComments(comments) {
     const commentsContainer = document.querySelector(".commentsContainer");
     commentsContainer.innerHTML = "";
+
+    if(!comments) return;
 
     //HTML 생성
     comments.forEach((comment) => {
@@ -113,8 +117,8 @@ document.addEventListener("DOMContentLoaded", function () {
       deleteCommentBtn.className = "editRemoveBtn";
 
       // 컨테이너 구성하기
-      userProfile.src = comment.profileImg;
-      writerName.textContent = comment.author;
+      userProfile.src = comment.profileImage || "/images/circle-user.png"; // TODO: 기본프사 경로 설정 다시하기
+      writerName.textContent = comment.nickname;
       createdTime.textContent = comment.createdAt;
       commentContent.innerHTML = comment.content;
       editCommentBtn.textContent = "수정";
@@ -138,15 +142,18 @@ document.addEventListener("DOMContentLoaded", function () {
   // 게시물 상세 내용 가져오기
   async function fetchPost() {
     try {
-      const response = await fetch("../data/posts.json");
-      const posts = await response.json();
-      const post = posts.find((post) => post.postId === postId);
+      const response = await fetch(`http://localhost:3000/posts/${postId}`, {
+        method: "GET",
+      });
 
-      if(post){
-        displayPost(post);
-      }else {
-        console.log("게시물을 찾을 수 없습니다.");
+      if (!response.ok){
+        const {message} = await response.json();
+        throw new Error(`Error ${response.status}: ${message || 'Unknown error'}`);
       }
+
+      const {data: post} = await response.json();
+      displayPost(post);
+
     }catch (error) {
       console.error(`[fetchPost Error] 게시물 ${postId}에 대한 상세 데이터를 가져올 수 없습니다.`, error);
     }
@@ -155,15 +162,17 @@ document.addEventListener("DOMContentLoaded", function () {
   // 댓글 가져오기
   async function fetchComments() {
     try {
-      const response = await fetch("../data/comments.json");
-      const data = await response.json();
-      const comments = data[postId];
+      const response = await fetch(`http://localhost:3000/posts/${postId}/comments`, {
+        method: "GET",
+      });
 
-      if(comments){
-        displayComments(comments);
-      }else{
-        console.log("댓글이 없습니다.");
+      if (!response.ok){
+        const {message} = await response.json();
+        throw new Error(`Error ${response.status}: ${message || 'Unknown error'}`);
       }
+
+      const {data: comments} = await response.json();
+      displayComments(comments);
 
     } catch (error) {
       console.error(`[fetchComments Error] 게시물 ${postId}에 대한 댓글 데이터를 가져올 수 없습니다.`, error);
