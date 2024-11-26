@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
   const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
 
-  const editPostBtn = document.getElementById("postEditBtn");
+  const editPostBtn = document.getElementById("editPostBtn");
   const editCommentBtn = document.getElementById("editCommentBtn");
 
-  const deletePostBtn = document.getElementById("postDeleteBtn");
+  const deletePostBtn = document.getElementById("deletePostBtn");
   const deleteCommentBtn = document.getElementById("deleteCommentBtn");
 
   const postModalOverlay = document.getElementById("postModalOverlay");
@@ -20,16 +20,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const createCommentBtn = document.getElementById("writeCommentBtn");
   
 
-  // function getCurrentDate() {
-  //   let today = new Date();
-  //   today.setHours(today.getHours() + 9); // 미국시간 기준이니까 9를 더해주면 대한민국 시간됨
-  //   return today.toISOString().replace("T", " ").substring(0, 19); // 문자열로 바꿔주고 T를 빈칸으로 바꿔주면 yyyy-mm-dd hh:mm:ss 이런 형식 나옴
-  // }
-
   // 게시물 수정
   function editPost() {
-    //TODO: 
-    window.location.href = "/posts/post-id/edit";
+    window.location.href = `/posts/${postId}/edit`;
   }
 
   // 댓글 수정
@@ -65,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("postWriterName").textContent = post.nickname;
     document.querySelector(".createdTime").textContent = post.createdAt;
     document.querySelector(".postContent").innerHTML = post.content;
-    if(post.postImage.trim()){
+    if(post.postImage){
       document.querySelector(".postImage").src = post.postImage;
     }else{
       document.querySelector(".postImageContainer").style.display = "none";
@@ -135,8 +128,6 @@ document.addEventListener("DOMContentLoaded", function () {
       deleteCommentBtn.addEventListener("click", deleteComment);
 
     });
-
-
   }
 
   // 게시물 상세 내용 가져오기
@@ -192,25 +183,36 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // TODO: 댓글 등록
-  function createComment() {
-
-    console.log("댓글등록 버튼 클릭함.")
-
+  async function createComment() {
     const commentValue = commentTextArea.value.trim();
-
     if (!commentValue) return false;
 
-    const newComment = {
-      "commentId": 1,
-      "userId": 1,
-      "author": "mj",
-      "profileImg": "/images/bunny.jpeg",
-      "content": commentValue,
-      "createdAt": `${getCurrentDate()}`
+    try{
+      const API_URL = `http://localhost:3000/posts/${postId}/comments`;
+      const newCommentData = {
+        "content": commentValue
+      };
+
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newCommentData)
+      });
+
+      if(!response.ok){
+        const {message} = await response.json();
+        throw new Error(`Error ${response.status}: ${message || 'Unknown error'}`);
+      }
+
+      commentTextArea.value = "";
+      await response.json();
+      fetchComments();
+
+    }catch(error){
+      console.error('댓글 등록 실패', error);
     }
-
-    // TODO: 새로운 댓글 json에 추가하고, 댓글목록 다시 fetch하기.
-
   }
 
 
@@ -224,11 +226,6 @@ document.addEventListener("DOMContentLoaded", function () {
   commentTextArea.addEventListener("input", updateCreateCommentBtn);
   createCommentBtn.addEventListener("click", createComment);
 
-
-
-  // editPostBtn.addEventListener("click", function () {
-  //   window.location.href = "/posts/post-id/edit";
-  // });
 
   window.addEventListener("click", function (event) {
     // 모달 바깥 클릭 시 닫기

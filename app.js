@@ -47,7 +47,7 @@ app.get('/posts/:postId', (req, res) => {
 });
 
 
-app.get('/posts/post-id/edit', (req, res) => {
+app.get('/posts/:postId/edit', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'edit-post.html'));
 });
 

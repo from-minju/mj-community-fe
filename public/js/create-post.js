@@ -41,10 +41,10 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateCreatePostBtn() {
         if(titleInput.value.trim() != "" && contentInput.value.trim() != "" && validateTitle()){
             createPostBtn.style.backgroundColor = "#7f6aee";
-            createPostBtn.disabled = "false"; //버튼 활성화
+            createPostBtn.disabled = false; //버튼 활성화
         } else{
             createPostBtn.style.backgroundColor = "#aca0eb";
-            createPostBtn.disabled = "true"; //버튼 비활성화 
+            createPostBtn.disabled = true; //버튼 비활성화 
         }
     };
 
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const {data: data} = await response.json();
             const newPostId = data.postId;
 
-            window.location.href = `http://localhost:8000/posts/${newPostId}`;
+            window.location.href = `http://localhost:8000/posts/${newPostId}`; 
 
         }catch(error){
             console.error('게시물 작성 실패');
@@ -85,8 +85,8 @@ document.addEventListener("DOMContentLoaded", function () {
     titleInput.addEventListener("input", updateTitleHelperText);
     contentInput.addEventListener("input", updateContentHelperText);
 
-    // titleInput.addEventListener("input", updateCreatePostBtn);
-    // contentInput.addEventListener("input", updateCreatePostBtn);
+    titleInput.addEventListener("input", updateCreatePostBtn);
+    contentInput.addEventListener("input", updateCreatePostBtn);
 
     createPostBtn.addEventListener("click", createPost);
     
