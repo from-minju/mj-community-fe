@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async() =>  {
     const postId = window.location.pathname.split("/")[2]; 
 
     const titleInput = document.getElementById("titleInput");
@@ -104,9 +104,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok) {
                 console.log(message);
-                window.location.href = `/posts/${postId}`;
-
                 // 수정된 게시물이 정상적으로 수정되었으면 /posts/:postId로 리다이렉트
+                // setTimeout(()=> (window.location.href = `/posts/${postId}`), 1000);
+                window.location.href = `/posts/${postId}`;
+        
             } else {
                 // 에러 응답인 경우
                 throw new Error(`게시물 수정 실패: ${message || '알 수 없는 오류'}`);

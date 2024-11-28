@@ -1,238 +1,299 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
+const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
 
-  const editPostBtn = document.getElementById("editPostBtn");
-  const editCommentBtn = document.getElementById("editCommentBtn");
+const editPostBtn = document.getElementById("editPostBtn");
+const editCommentBtn = document.getElementById("editCommentBtn");
 
-  const deletePostBtn = document.getElementById("deletePostBtn");
-  const deleteCommentBtn = document.getElementById("deleteCommentBtn");
+const deletePostBtn = document.getElementById("deletePostBtn");
+const deleteCommentBtn = document.getElementById("deleteCommentBtn");
 
-  const postModalOverlay = document.getElementById("postModalOverlay");
-  const commentModalOverlay = document.getElementById("commentModalOverlay");
+const postModalOverlay = document.getElementById("postModalOverlay");
+const commentModalOverlay = document.getElementById("commentModalOverlay");
 
-  const closePostModalBtn = document.getElementById("closePostModal");
-  const closeCommentModalBtn = document.getElementById("closeCommentModal");
+const closePostModalBtn = document.getElementById("closePostModal");
+const closeCommentModalBtn = document.getElementById("closeCommentModal");
 
-  const okPostModalBtn = document.getElementById("okPostModal");
-  const okCommentModalBtn = document.getElementById("okCommentModal");
+const okPostModalBtn = document.getElementById("okPostModal");
+const okCommentModalBtn = document.getElementById("okCommentModal");
 
-  const commentTextArea = document.getElementById("writeCommentArea");
-  const createCommentBtn = document.getElementById("writeCommentBtn");
-  
+const commentTextArea = document.getElementById("writeCommentArea");
+const createOrEditCommentBtn = document.getElementById("writeCommentBtn");
 
-  // 게시물 수정
-  function editPost() {
-    window.location.href = `/posts/${postId}/edit`;
-  }
+let editingCommentId = false;
 
-  // 댓글 수정
-  function editComment() {
-    //TODO: 
-    console.log("댓글 수정 버튼 클릭함")
-  }
+function formatCnt(cnt) {
+  if (cnt >= 1000) return `${Math.floor(cnt / 1000)}k`;
+  return `${cnt}`;
+}
 
-  // 게시물 삭제
-  function deletePost() {
-    postModalOverlay.style.display = "flex";
-    closePostModalBtn.addEventListener("click", () => {
-      postModalOverlay.style.display = "none";
+function enableBtn() {
+  createOrEditCommentBtn.disabled = false;
+  createOrEditCommentBtn.style.backgroundColor = "#7f6aee";
+  createOrEditCommentBtn.style.cursor = "pointer";
+}
+
+function disableBtn() {
+  createOrEditCommentBtn.disabled = true;
+  createOrEditCommentBtn.style.backgroundColor = "#aca0eb";
+}
+
+// 게시물 수정
+function editPost() {
+  window.location.href = `/posts/${postId}/edit`;
+}
+
+// 게시물 삭제
+function deletePost() {
+  postModalOverlay.style.display = "flex";
+  closePostModalBtn.addEventListener("click", () => {
+    postModalOverlay.style.display = "none";
+  });
+}
+
+async function deleteComment(commentId) {
+  try {
+    const API_URL = `http://localhost:3000/posts/${postId}/comments/${commentId}`;
+    const response = await fetch(API_URL, {
+      method: "DELETE",
     });
-  }
 
-  // 댓글 삭제
-  function deleteComment() {
-    commentModalOverlay.style.display = "flex";
-    closeCommentModalBtn.addEventListener("click", () => {
-      commentModalOverlay.style.display = "none";
-    });
-  }
-
-  function formatCnt(cnt) {
-    if (cnt >= 1000) return `${Math.floor(cnt / 1000)}k`;
-    return `${cnt}`;
-  }
-
-  function displayPost(post) {
-    document.querySelector(".postTitle").textContent = post.title;
-    document.getElementById("postWriterProfileImage").src = post.profileImage;
-    document.getElementById("postWriterName").textContent = post.nickname;
-    document.querySelector(".createdTime").textContent = post.createdAt;
-    document.querySelector(".postContent").innerHTML = post.content;
-    if(post.postImage){
-      document.querySelector(".postImage").src = post.postImage;
-    }else{
-      document.querySelector(".postImageContainer").style.display = "none";
+    if (!response.ok) {
+      const { message } = await response.json();
+      throw new Error(
+        `Error ${response.status}: ${message || "Unknown error"}`
+      );
     }
-    document.getElementById("likesCnt").textContent = formatCnt(post.likes);
-    document.getElementById("viewsCnt").textContent = formatCnt(post.views);
-    document.getElementById("commentsCnt").textContent = formatCnt(post.comments);
+
+    await response.json();
+  } catch (error) {
+    console.error(error);
   }
+}
 
-  function displayComments(comments) {
-    const commentsContainer = document.querySelector(".commentsContainer");
-    commentsContainer.innerHTML = "";
+async function handleEditCommentBtn(commentId, content) {
+  editingCommentId = commentId;
+  createOrEditCommentBtn.textContent = "댓글 수정";
+  enableBtn();
+  commentTextArea.value = content;
+}
 
-    if(!comments) return;
+function handleDeleteCommentBtn(commentId) {
+  commentModalOverlay.style.display = "flex";
 
-    //HTML 생성
-    comments.forEach((comment) => {
-      const commentContainer = document.createElement("div");
-      commentContainer.className = "commentContainer";
+  closeCommentModalBtn.addEventListener("click", () => {
+    commentModalOverlay.style.display = "none";
+  });
 
-      const metaContainer = document.createElement("div");
-      metaContainer.className = "metaContainer";
+  okCommentModalBtn.addEventListener("click", async () => {
+    await deleteComment(commentId);
+    commentModalOverlay.style.display = "none";
+    fetchComments();
+  });
+}
 
-      const commentContent = document.createElement("div");
-      commentContent.className = "commentContent";
+function displayPost(post) {
+  document.querySelector(".postTitle").textContent = post.title;
+  document.getElementById("postWriterProfileImage").src = post.profileImage;
+  document.getElementById("postWriterName").textContent = post.nickname;
+  document.querySelector(".createdTime").textContent = post.createdAt;
+  document.querySelector(".postContent").innerHTML = post.content;
+  if (post.postImage) {
+    document.querySelector(".postImage").src = post.postImage;
+  } else {
+    document.querySelector(".postImageContainer").style.display = "none";
+  }
+  document.getElementById("likesCnt").textContent = formatCnt(post.likes);
+  document.getElementById("viewsCnt").textContent = formatCnt(post.views);
+  document.getElementById("commentsCnt").textContent = formatCnt(post.comments);
+}
 
-      const metaLeftContainer = document.createElement("div");
-      metaLeftContainer.className = "metaLeftContainer";
+function displayComments(comments) {
+  const commentsContainer = document.querySelector(".commentsContainer");
+  commentsContainer.innerHTML = "";
 
-      const editRemoveBtnContainer = document.createElement("div");
-      editRemoveBtnContainer.className = "editRemoveBtnContainer";
+  if (!comments) return;
 
-      const writerArea = document.createElement("div");
-      writerArea.className = "writerArea";
+  //HTML 생성
+  comments.forEach((comment) => {
+    const commentContainer = document.createElement("div");
+    commentContainer.className = "commentContainer";
+    commentContainer.setAttribute("data-comment-id", comment.commentId);
 
-      const createdTime = document.createElement("div");
-      createdTime.className = "createdTime";
+    const metaContainer = document.createElement("div");
+    metaContainer.className = "metaContainer";
 
-      const userProfile = document.createElement("img");
-      userProfile.className = "userProfile";
+    const commentContent = document.createElement("div");
+    commentContent.className = "commentContent";
 
-      const writerName = document.createElement("p");
-      writerName.className = "writerName";
+    const metaLeftContainer = document.createElement("div");
+    metaLeftContainer.className = "metaLeftContainer";
 
-      const editCommentBtn = document.createElement("button");
-      editCommentBtn.className = "editRemoveBtn";
+    const editRemoveBtnContainer = document.createElement("div");
+    editRemoveBtnContainer.className = "editRemoveBtnContainer";
 
-      const deleteCommentBtn = document.createElement("button");
-      deleteCommentBtn.className = "editRemoveBtn";
+    const writerArea = document.createElement("div");
+    writerArea.className = "writerArea";
 
-      // 컨테이너 구성하기
-      userProfile.src = comment.profileImage || "/images/circle-user.png"; // TODO: 기본프사 경로 설정 다시하기
-      writerName.textContent = comment.nickname;
-      createdTime.textContent = comment.createdAt;
-      commentContent.innerHTML = comment.content;
-      editCommentBtn.textContent = "수정";
-      deleteCommentBtn.textContent = "삭제";
+    const createdTime = document.createElement("div");
+    createdTime.className = "createdTime";
 
-      writerArea.append(userProfile, writerName);
-      metaLeftContainer.append(writerArea, createdTime);
-      editRemoveBtnContainer.append(editCommentBtn, deleteCommentBtn);
-      metaContainer.append(metaLeftContainer, editRemoveBtnContainer);
-      commentContainer.append(metaContainer, commentContent);
-      commentsContainer.append(commentContainer);
+    const userProfile = document.createElement("img");
+    userProfile.className = "userProfile";
 
-      editCommentBtn.addEventListener("click", editComment);
-      deleteCommentBtn.addEventListener("click", deleteComment);
+    const writerName = document.createElement("p");
+    writerName.className = "writerName";
 
+    const editCommentBtn = document.createElement("button");
+    editCommentBtn.className = "editRemoveBtn";
+
+    const deleteCommentBtn = document.createElement("button");
+    deleteCommentBtn.className = "editRemoveBtn";
+
+    // 컨테이너 구성하기
+    userProfile.src = comment.profileImage || "/images/circle-user.png"; // TODO: 기본프사 경로 설정 다시하기
+    writerName.textContent = comment.nickname;
+    createdTime.textContent = comment.createdAt;
+    commentContent.innerHTML = comment.content;
+    editCommentBtn.textContent = "수정";
+    deleteCommentBtn.textContent = "삭제";
+
+    writerArea.append(userProfile, writerName);
+    metaLeftContainer.append(writerArea, createdTime);
+    editRemoveBtnContainer.append(editCommentBtn, deleteCommentBtn);
+    metaContainer.append(metaLeftContainer, editRemoveBtnContainer);
+    commentContainer.append(metaContainer, commentContent);
+    commentsContainer.append(commentContainer);
+
+    editCommentBtn.addEventListener("click", () => {
+      handleEditCommentBtn(comment.commentId, comment.content);
     });
-  }
+    deleteCommentBtn.addEventListener("click", () => {
+      handleDeleteCommentBtn(comment.commentId);
+    });
+  });
+}
 
-  // 게시물 상세 내용 가져오기
-  async function fetchPost() {
-    try {
-      const response = await fetch(`http://localhost:3000/posts/${postId}`, {
+// 게시물 상세 내용 가져오기
+async function fetchPost() {
+  try {
+    const response = await fetch(`http://localhost:3000/posts/${postId}`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      const { message } = await response.json();
+      throw new Error(
+        `Error ${response.status}: ${message || "Unknown error"}`
+      );
+    }
+
+    const { data: post } = await response.json();
+    displayPost(post);
+
+  } catch (error) {
+    console.error(
+      `[fetchPost Error] 게시물 ${postId}에 대한 상세 데이터를 가져올 수 없습니다.`,
+      error
+    );
+  }
+}
+
+// 댓글 가져오기
+async function fetchComments() {
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/posts/${postId}/comments`,
+      {
         method: "GET",
-      });
-
-      if (!response.ok){
-        const {message} = await response.json();
-        throw new Error(`Error ${response.status}: ${message || 'Unknown error'}`);
       }
+    );
 
-      const {data: post} = await response.json();
-      displayPost(post);
-
-    }catch (error) {
-      console.error(`[fetchPost Error] 게시물 ${postId}에 대한 상세 데이터를 가져올 수 없습니다.`, error);
+    if (!response.ok) {
+      const { message } = await response.json();
+      throw new Error(
+        `Error ${response.status}: ${message || "Unknown error"}`
+      );
     }
+
+    const { data: comments } = await response.json();
+    displayComments(comments);
+
+  } catch (error) {
+    console.error(
+      `[fetchComments Error] 게시물 ${postId}에 대한 댓글 데이터를 가져올 수 없습니다.`,
+      error
+    );
   }
+}
 
-  // 댓글 가져오기
-  async function fetchComments() {
-    try {
-      const response = await fetch(`http://localhost:3000/posts/${postId}/comments`, {
-        method: "GET",
-      });
+function updateCreateCommentBtn() {
+  const commentValue = commentTextArea.value.trim();
+  if (commentValue) {
+    enableBtn();
+  } else {
+    disableBtn();
+  }
+}
 
-      if (!response.ok){
-        const {message} = await response.json();
-        throw new Error(`Error ${response.status}: ${message || 'Unknown error'}`);
-      }
+async function createOrEditComment() {
+  if (!commentTextArea.value.trim()) return;
 
-      const {data: comments} = await response.json();
-      displayComments(comments);
+  const API_URL = !editingCommentId
+    ? `http://localhost:3000/posts/${postId}/comments`
+    : `http://localhost:3000/posts/${postId}/comments/${editingCommentId}`;
 
-    } catch (error) {
-      console.error(`[fetchComments Error] 게시물 ${postId}에 대한 댓글 데이터를 가져올 수 없습니다.`, error);
+  const method = !editingCommentId ? "POST" : "PUT";
+  const commentData = {
+    content: commentTextArea.value.trim(),
+  };
+
+  try {
+    const response = await fetch(API_URL, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(commentData),
+    });
+
+    if (!response.ok) {
+      const { message } = await response.json();
+      throw new Error(
+        `Error ${response.status}: ${message || "Unknown error"}`
+      );
     }
+
+    editingCommentId = false;
+
+    disableBtn();
+
+    createOrEditCommentBtn.textContent = "댓글 등록";
+    commentTextArea.value = "";
+
+    await response.json();
+    fetchPost();
+    fetchComments();
+  } catch (error) {
+    console.error("댓글 등록 또는 수정 실패", error);
   }
+}
 
-  function updateCreateCommentBtn(){
-    const commentValue = commentTextArea.value.trim();
-    if(commentValue){
-      createCommentBtn.disabled = false; 
-      createCommentBtn.style.backgroundColor = "#7f6aee";
-      createCommentBtn.style.cursor = "pointer";
-    }else{
-      createCommentBtn.disabled = true; 
-      createCommentBtn.style.backgroundColor = "#aca0eb";
-    }
-  }
-
-  // TODO: 댓글 등록
-  async function createComment() {
-    const commentValue = commentTextArea.value.trim();
-    if (!commentValue) return false;
-
-    try{
-      const API_URL = `http://localhost:3000/posts/${postId}/comments`;
-      const newCommentData = {
-        "content": commentValue
-      };
-
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newCommentData)
-      });
-
-      if(!response.ok){
-        const {message} = await response.json();
-        throw new Error(`Error ${response.status}: ${message || 'Unknown error'}`);
-      }
-
-      commentTextArea.value = "";
-      await response.json();
-      fetchComments();
-
-    }catch(error){
-      console.error('댓글 등록 실패', error);
-    }
-  }
-
-
-
+document.addEventListener('DOMContentLoaded', () => {
   fetchPost();
   fetchComments();
-  
-  editPostBtn.addEventListener("click", editPost);
-  deletePostBtn.addEventListener("click", deletePost);
+});
 
-  commentTextArea.addEventListener("input", updateCreateCommentBtn);
-  createCommentBtn.addEventListener("click", createComment);
+editPostBtn.addEventListener("click", editPost);
+deletePostBtn.addEventListener("click", deletePost);
 
+commentTextArea.addEventListener("input", updateCreateCommentBtn);
+createOrEditCommentBtn.addEventListener("click", createOrEditComment);
 
-  window.addEventListener("click", function (event) {
-    // 모달 바깥 클릭 시 닫기
-    if (event.target === postModalOverlay) {
-      postModalOverlay.style.display = "none";
-    } else if (event.target === commentModalOverlay) {
-      commentModalOverlay.style.display = "none";
-    }
-  });
+window.addEventListener("click", function (event) {
+  // 모달 바깥 클릭 시 닫기
+  if (event.target === postModalOverlay) {
+    postModalOverlay.style.display = "none";
+  } else if (event.target === commentModalOverlay) {
+    commentModalOverlay.style.display = "none";
+  }
 });

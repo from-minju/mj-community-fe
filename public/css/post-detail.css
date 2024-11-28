@@ -180,5 +180,6 @@ hr {
 .commentContent{
     padding-left: 46px;
     font-size: 15px;
+    white-space: pre-wrap;
 }
 
