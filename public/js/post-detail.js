@@ -1,3 +1,5 @@
+import { enableBtn, disableBtn } from "./utils.js";
+
 const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
 
 const editPostBtn = document.getElementById("editPostBtn");
@@ -23,17 +25,6 @@ let editingCommentId = false;
 function formatCnt(cnt) {
   if (cnt >= 1000) return `${Math.floor(cnt / 1000)}k`;
   return `${cnt}`;
-}
-
-function enableBtn() {
-  createOrEditCommentBtn.disabled = false;
-  createOrEditCommentBtn.style.backgroundColor = "#7f6aee";
-  createOrEditCommentBtn.style.cursor = "pointer";
-}
-
-function disableBtn() {
-  createOrEditCommentBtn.disabled = true;
-  createOrEditCommentBtn.style.backgroundColor = "#aca0eb";
 }
 
 // 게시물 수정
@@ -72,7 +63,7 @@ async function deleteComment(commentId) {
 async function handleEditCommentBtn(commentId, content) {
   editingCommentId = commentId;
   createOrEditCommentBtn.textContent = "댓글 수정";
-  enableBtn();
+  enableBtn(createOrEditCommentBtn);
   commentTextArea.value = content;
 }
 
@@ -229,9 +220,9 @@ async function fetchComments() {
 function updateCreateCommentBtn() {
   const commentValue = commentTextArea.value.trim();
   if (commentValue) {
-    enableBtn();
+    enableBtn(createOrEditCommentBtn);
   } else {
-    disableBtn();
+    disableBtn(createOrEditCommentBtn);
   }
 }
 
@@ -265,7 +256,7 @@ async function createOrEditComment() {
 
     editingCommentId = false;
 
-    disableBtn();
+    disableBtn(createOrEditCommentBtn);
 
     createOrEditCommentBtn.textContent = "댓글 등록";
     commentTextArea.value = "";
