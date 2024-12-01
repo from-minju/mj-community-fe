@@ -1,7 +1,7 @@
 .wrap2 {
     width: 350px;
     margin-top: 80px;
-    padding: 20px;
+    padding: 10px;
 }
 
 .btn_wrap {
@@ -56,4 +56,5 @@
     padding-top: 8px;
     color: red;
     display: none;
+    font-size: 12px;
 }

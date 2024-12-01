@@ -37,13 +37,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if(!passwordValue){ return false; }
 
-    if (passwordValue &&
-      !passwordPattern.test(passwordInput.value)
-    ) {
+    if (passwordValue && !passwordPattern.test(passwordInput.value)) {
       return false; //유효하지 않음
-    } else {
-      return true; //유효함
-    }
+    } 
+    
+    return true; //유효함
+    
   };
 
   function validatePasswordChk() {

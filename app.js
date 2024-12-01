@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // 라우팅 설정
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'bookmarks.html'));
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
 app.get('/auth/signup', (req, res) => {
@@ -26,13 +26,13 @@ app.get('/auth/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'login.html'));
 });
 
-app.get('/users/user-id/edit-profile', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'edit-profile.html'));
-});
+// app.get('/users/user-id/edit-profile', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'edit-profile.html'));
+// });
 
-app.get('/users/user-id/change-password', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'change-password.html'));
-});
+// app.get('/users/user-id/change-password', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'change-password.html'));
+// });
 
 app.get('/posts', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
@@ -45,7 +45,6 @@ app.get('/posts/create', (req, res) => {
 app.get('/posts/:postId', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'post-detail.html'));
 });
-
 
 app.get('/posts/:postId/edit', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'edit-post.html'));

@@ -24,34 +24,31 @@
     <article>
         <div class="wrap2">
             <h1>로그인</h1>
+            <div class="input_box">
+                <label for="id" class="text_label" id="id_label">이메일</label>
+                <input type="email" id="email" name="email" maxlength="41" title="이메일" />
+                <div class="helper_text" id="emailHelperText">* helper text</div>
+            </div>
+            <div class="input_box">
+                <label for="pw" class="text_label" id="pw_label">비밀번호</label>
+                <input type="password" id="password" name="password" maxlength="41" title="비밀번호" />
+                <div class="helper_text" id="passwordHelperText">* helper text</div>
+            </div>
 
-            <form action="/auth/login" accept-charset="utf-8" name="login" method="post">
-                <div class="input_box">
-                    <label for="id" class="text_label" id="id_label">이메일</label>
-                    <input type="email" id="email" name="email" maxlength="41" title="이메일" />
-                    <div class="helper_text" id="emailHelperText">* helper text</div>
+
+            <div class="btn_wrap">
+                <button type="submit" id="loginBtn" class="btn_login" disabled>
+                    로그인
+                </button>
+
+                <div class="btn_register">
+                    <a href="/auth/signup" id="btn_register" class="btn_register">회원가입</a>
                 </div>
-                <div class="input_box">
-                    <label for="pw" class="text_label" id="pw_label">비밀번호</label>
-                    <input type="password" id="password" name="password" maxlength="41" title="비밀번호" />
-                    <div class="helper_text" id="passwordHelperText">* helper text</div>
-                </div>
-
-
-                <div class="btn_wrap">
-                    <button type="submit" id="loginBtn" class="btn_login">
-                        로그인
-                    </button>
-
-                    <div class="btn_register">
-                        <a href="/auth/signup" id="btn_register" class="btn_register">회원가입</a>
-                    </div>
-                </div>
-            </form>
+            </div>                
         </div>
     </article>
 
-    <script src="/js/login.js"></script>
+    <script type="module" src="/js/login.js"></script>
 
 </body>
 
