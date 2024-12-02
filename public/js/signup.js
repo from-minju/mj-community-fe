@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if(!emailValue){ return false; }
 
-    if (emailPattern.test(emailInput.value) && checkEmailDuplicates()) {
+    if (emailPattern.test(emailInput.value)) {
       return true;
     } else {
       return false;
@@ -64,14 +64,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const nicknameValue = nicknameInput.value.trim();
     const spaceChkPattern = /\s/g;
 
-    // TODO: 닉네임 유효성 중복 검사
-
     if(!nicknameValue){return false;}
 
     if(nicknameValue && 
         (nicknameValue.length <= 10) && 
         !spaceChkPattern.test(nicknameValue) &&
-        checkNicknameDuplicates()){
+        isNicknameDuplicates()){
         return true;
     }
     return false;
@@ -81,33 +79,70 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * 중복 검사
    */
-  async function checkEmailDuplicates() {
-    //TODO: 이메일이 중복인지 아닌지 확인하는 함수 (리턴: true, false)
-    
+  async function isEmailDuplicates() {
+    const API_URL = `http://localhost:3000/users/check-email`;
+    const checkEmailData = {
+      email: emailInput.value.trim()
+    };
 
+    try{
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(checkEmailData)
+      });
+      const data = await response.json();
 
-    return true;
+      return data.isDuplicate;
+      
+    }catch(error){
+      console.error(error);
+    }
   };
 
-  function checkNicknameDuplicates() {
-    //TODO: 닉네임이 중복인지 아닌지 확인하는 함수 (리턴: true, false)
-    return true;
+  async function isNicknameDuplicates() {
+    const API_URL = `http://localhost:3000/users/check-nickname`;
+    const checkNicknameData = {
+      nickname: nicknameInput.value.trim()
+    };
+
+    try{
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(checkNicknameData)
+      });
+      const data = await response.json();
+
+      return data.isDuplicate;
+      
+    }catch(error){
+      console.error(error);
+    }
   };
 
 
   /**
    * Helper Text 업데이트
    */
-  function updateEmailHelperText() {
-    if (!emailInput.value.trim()){
-        emailHelperText.textContent = "*이메일을 입력해주세요.";
-    }else if(!checkEmailDuplicates()){
-        emailHelperText.textContent = "*중복된 이메일 입니다.";
-    }else if(validateEmail()){
-        emailHelperText.textContent = "";
-    }else{
-        emailHelperText.textContent = "*올바른 이메일 주소 형식을 입력해주세요. (예: example@example.com)";
-    };
+  async function updateEmailHelperText() {
+    if(!emailInput.value.trim()){
+      emailHelperText.textContent = "*이메일을 입력해주세요.";
+      return;
+    }
+
+    if(!validateEmail()){
+      emailHelperText.textContent = "*올바른 이메일 주소 형식을 입력해주세요. (예: example@example.com)";
+      return;
+    }
+
+    const isDuplicate = await isEmailDuplicates();
+    if(isDuplicate){
+      emailHelperText.textContent = "*중복된 이메일 입니다.";
+      return;
+    }
+
+    emailHelperText.textContent = "";
   };
 
   function updatePasswordHelperText() {
@@ -134,22 +169,32 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  function updateNicknameHelperText() {
+  async function updateNicknameHelperText() {
     const nicknameValue = nicknameInput.value.trim();
     const spaceChkPattern = /\s/g;
 
     if(!nicknameValue){
-        nicknameHelperText.textContent = "*닉네임을 입력해주세요.";
-    }else if(spaceChkPattern.test(nicknameValue)){
-        nicknameHelperText.textContent = "*띄어쓰기를 없애주세요.";
-    }else if(nicknameValue.length > 10){
-        nicknameHelperText.textContent = "*닉네임은 최대 10자까지 작성 가능합니다.";
-    }else if(!checkNicknameDuplicates){ 
-        // TODO: 닉네임 중복 검사
-        nicknameHelperText.textContent = "*중복된 닉네임 입니다.";
-    }else{
-        nicknameHelperText.textContent = "";
+      nicknameHelperText.textContent = "*닉네임을 입력해주세요.";
+      return;
     }
+
+    if(spaceChkPattern.test(nicknameValue)){
+      nicknameHelperText.textContent = "*띄어쓰기를 없애주세요.";
+      return;
+    }
+
+    if(nicknameValue.length > 10){
+      nicknameHelperText.textContent = "*닉네임은 최대 10자까지 작성 가능합니다.";
+      return;
+    }
+
+    const isDuplicate = await isNicknameDuplicates();
+    if(isDuplicate){
+      nicknameHelperText.textContent = "*중복된 닉네임 입니다.";
+      return;
+    }
+
+    nicknameHelperText.textContent = "";
   };
 
   function updateProfileImageHelperText() {
@@ -157,13 +202,12 @@ document.addEventListener("DOMContentLoaded", function () {
         profileImageHelperText.textContent = "*프로필 사진을 추가해주세요.";
     }else{
         profileImageHelperText.textContent = "";
-
     }
   };
 
 
   // 회원가입 버튼 활성화 
-  function updateSignupBtn (){
+  async function updateSignupBtn (){
     if(validateEmail() && validatePassword() && validatePasswordChk() && validateNickname()){
       enableBtn(signupBtn);
     } else{
@@ -192,6 +236,11 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   async function signup() {
+    if(await isEmailDuplicates() || await isNicknameDuplicates()){
+      alert("회원가입 실패: 다시 시도해주세요.")
+      return;
+    }
+
     const API_URL = `http://localhost:3000/auth/signup`;
     const signupData = {
       email: emailInput.value.trim(),
