@@ -1,3 +1,5 @@
+import { enableBtn, disableBtn } from "./utils.js";
+
 document.addEventListener("DOMContentLoaded", function () {
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
@@ -40,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (passwordValue && !passwordPattern.test(passwordInput.value)) {
       return false; //유효하지 않음
     } 
-    
+
     return true; //유효함
     
   };
@@ -79,8 +81,11 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * 중복 검사
    */
-  function checkEmailDuplicates() {
+  async function checkEmailDuplicates() {
     //TODO: 이메일이 중복인지 아닌지 확인하는 함수 (리턴: true, false)
+    
+
+
     return true;
   };
 
@@ -110,8 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
         passwordHelperText.textContent = "*비밀번호를 입력해주세요.";
     } else if(!validatePassword()){
         passwordHelperText.textContent = "*비밀번호는 8자 이상, 20자 이하이며, 대문자, 소문자, 숫자, 특수문자를 각각 최소 1개 포함해야 합니다.";
-    }
-    else {
+    }else {
         passwordHelperText.textContent = "";
     }
   };
@@ -161,11 +165,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // 회원가입 버튼 활성화 
   function updateSignupBtn (){
     if(validateEmail() && validatePassword() && validatePasswordChk() && validateNickname()){
-        signupBtn.disabled = false;
-        signupBtn.style.backgroundColor = "#7f6aee";
+      enableBtn(signupBtn);
     } else{
-        signupBtn.disabled = true;
-        signupBtn.style.backgroundColor = "#aca0eb";
+      disableBtn(signupBtn);
     }
   };
 
@@ -189,6 +191,35 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
+  async function signup() {
+    const API_URL = `http://localhost:3000/auth/signup`;
+    const signupData = {
+      email: emailInput.value.trim(),
+      password: passwordInput.value.trim(),
+      nickname: nicknameInput.value.trim(),
+      profileImageInput: profileImageInput.src
+    }
+
+    try{
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(signupData)
+      });
+
+      const {message} = await response.json();
+      if(response.ok){
+        alert(message);
+        window.location.href = `http://localhost:8000/auth/login`; 
+      }else{
+        alert(message);
+      }
+
+    }catch(error){
+      console.error(error);
+    }
+  }
+
 
   // Helper Text
   emailInput.addEventListener("blur", updateEmailHelperText);
@@ -206,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   profileImageInput.addEventListener("change", updateProfileImagePreview);
 
-//   signupBtn.addEventListener("click", );
+  signupBtn.addEventListener("click", signup);
 
 //TODO: 사진 
 

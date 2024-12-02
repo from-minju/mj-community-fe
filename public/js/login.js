@@ -57,9 +57,6 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     async function login(){
-        //Fetch하는거부터 시작하면 됨!!!!!!!!!!!!!!!!
-        //비밀번호,이메일 일치하지 않으면 우선은 그냥 토스트메시지 띄우기. (비밀번호 틀린경우 헬퍼텍스트까지 자세하게는 스킵.)
-
         const API_URL = `http://localhost:3000/auth/login`;
         const loginData = {
             email: emailInput.value.trim(),

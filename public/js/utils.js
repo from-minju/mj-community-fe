@@ -1,12 +1,12 @@
-export const enableBtn = (btn) => {
-  btn.disabled = false;
-  btn.style.backgroundColor = "#7f6aee";
-  btn.style.cursor = "pointer";
+export const enableBtn = (button) => {
+  button.disabled = false;
+  button.style.backgroundColor = "#7f6aee";
+  button.style.cursor = "pointer";
 }
 
-export const disableBtn = (btn) => {
-  btn.disabled = true;
-  btn.style.backgroundColor = "#aca0eb";
+export const disableBtn = (button) => {
+  button.disabled = true;
+  button.style.backgroundColor = "#aca0eb";
 }
 
 
