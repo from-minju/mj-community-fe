@@ -35,9 +35,32 @@ function editPost() {
 // 게시물 삭제
 function deletePost() {
   postModalOverlay.style.display = "flex";
+
   closePostModalBtn.addEventListener("click", () => {
     postModalOverlay.style.display = "none";
   });
+
+  okPostModalBtn.addEventListener("click", async() => {
+    try {
+      const API_URL = `http://localhost:3000/posts/${postId}`;
+      const response = await fetch(API_URL, {
+        method: "DELETE",
+      });
+  
+      if (response.ok) {
+        window.location.href = `/posts`;
+        alert("게시글이 삭제되었습니다.");
+      }else{
+        const { message } = await response.json();
+        throw new Error(
+          `Error ${response.status}: ${message || "Unknown error"}`
+        );
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
+  })
 }
 
 async function deleteComment(commentId) {
