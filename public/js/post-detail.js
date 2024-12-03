@@ -1,5 +1,7 @@
 import { enableBtn, disableBtn } from "./utils.js";
 
+const API_URL = window.API_URL || 'http://localhost:3000';
+
 const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
 
 const editPostBtn = document.getElementById("editPostBtn");
@@ -106,12 +108,12 @@ function handleDeleteCommentBtn(commentId) {
 
 function displayPost(post) {
   document.querySelector(".postTitle").textContent = post.title;
-  document.getElementById("postWriterProfileImage").src = post.profileImage;
+  document.getElementById("postWriterProfileImage").src = `${API_URL}${post.profileImage}`;
   document.getElementById("postWriterName").textContent = post.nickname;
   document.querySelector(".createdTime").textContent = post.createdAt;
   document.querySelector(".postContent").innerHTML = post.content;
   if (post.postImage) {
-    document.querySelector(".postImage").src = post.postImage;
+    document.querySelector(".postImage").src = `${API_URL}${post.postImage}`;
   } else {
     document.querySelector(".postImageContainer").style.display = "none";
   }

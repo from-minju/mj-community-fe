@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const titleHelperText = document.getElementById("titleHelperText");
     const contentHelperText = document.getElementById("contentHelperText");
 
+    const postImageInput = document.getElementById("postWriteImage");
     const createPostBtn = document.getElementById("createPostBtn");
 
     const TITLE_MAX = 26;
@@ -50,20 +51,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     async function createPost() {
-        try{
-            const API_URL = `http://localhost:3000/posts`;
-            const postData = {
-                title: titleInput.value.trim(),
-                content: contentInput.value.trim(),
-                postImage: "" // TODO:
-            }
+        const API_URL = `http://localhost:3000/posts`;
+        const postData = new FormData();
+        postData.append('title', titleInput.value.trim());
+        postData.append('content', contentInput.value.trim());
 
+        if(postImageInput.files[0]){
+            postData.append('postImage', postImageInput.files[0]);
+        }
+
+        try{
             const response = await fetch(API_URL, {
                 method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(postData)
+                body: postData
             });
 
             if(!response.ok){
