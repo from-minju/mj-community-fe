@@ -26,9 +26,9 @@ app.get('/auth/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'login.html'));
 });
 
-// app.get('/users/user-id/edit-profile', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'views', 'edit-profile.html'));
-// });
+app.get('/users/edit-profile', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'edit-profile.html'));
+});
 
 // app.get('/users/user-id/change-password', (req, res) => {
 //     res.sendFile(path.join(__dirname, 'views', 'change-password.html'));

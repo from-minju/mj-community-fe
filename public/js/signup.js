@@ -215,6 +215,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
+
+  // 프로필 이미지 등록
+  async function validateProfileImage() {
+    const file = profileImageInput.files[0];
+
+    // 유효성 검사
+    if(!file){
+      return false;
+    }
+    if(file.size > 5 * 1024 * 1024) {
+      alert("파일 크기는 5MB 이하여야 합니다.");
+      return false;
+    }
+    if(!['image/jpeg', 'image/png'].includes(file.type)) {
+      alert('JPEG 또는 PNG 파일만 업로드 가능합니다.');
+      return false;
+    }
+
+    // updateProfileImagePreview();
+
+  }
+
   // 프로필 이미지 띄우기 
   function updateProfileImagePreview(event) {
     const file = event.target.files[0];
@@ -242,18 +264,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const API_URL = `http://localhost:3000/auth/signup`;
-    const signupData = {
-      email: emailInput.value.trim(),
-      password: passwordInput.value.trim(),
-      nickname: nicknameInput.value.trim(),
-      profileImageInput: profileImageInput.src
+    const signupData = new FormData();
+    signupData.append('email', emailInput.value.trim());
+    signupData.append('password', passwordInput.value.trim());
+    signupData.append('nickname', nicknameInput.value.trim());
+
+    if (profileImageInput.files[0]) {
+        signupData.append('profileImage', profileImageInput.files[0]);
     }
 
     try{
       const response = await fetch(API_URL, {
         method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(signupData)
+        body: signupData
       });
 
       const {message} = await response.json();
@@ -283,7 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
   passwordChkInput.addEventListener("input", updateSignupBtn);
   nicknameInput.addEventListener("input", updateSignupBtn);
 
-
+  profileImageInput.addEventListener("change", profileImage);
   profileImageInput.addEventListener("change", updateProfileImagePreview);
 
   signupBtn.addEventListener("click", signup);

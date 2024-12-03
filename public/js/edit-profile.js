@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const nicknameHelperText = document.getElementById("nicknameHelperText");
 
+    
+
 
     // 닉네임 중복 검사 
     function checkNicknameDuplicates() {
@@ -119,9 +121,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
     profileImageInput.addEventListener("change", updateProfileImagePreview);
-
     nicknameInput.addEventListener("blur", updateNicknameHelperText);
-
     editBtn.addEventListener("click", editProfile);
 
 });
