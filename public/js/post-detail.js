@@ -108,12 +108,12 @@ function handleDeleteCommentBtn(commentId) {
 
 function displayPost(post) {
   document.querySelector(".postTitle").textContent = post.title;
-  document.getElementById("postWriterProfileImage").src = `${API_URL}${post.profileImage}`;
+  document.getElementById("postWriterProfileImage").src = `${API_URL}/uploads/${post.profileImage}`;
   document.getElementById("postWriterName").textContent = post.nickname;
   document.querySelector(".createdTime").textContent = post.createdAt;
   document.querySelector(".postContent").innerHTML = post.content;
   if (post.postImage) {
-    document.querySelector(".postImage").src = `${API_URL}${post.postImage}`;
+    document.querySelector(".postImage").src = `${API_URL}/uploads/${post.postImage}`;
   } else {
     document.querySelector(".postImageContainer").style.display = "none";
   }
@@ -191,7 +191,7 @@ function displayComments(comments) {
 // 게시물 상세 내용 가져오기
 async function fetchPost() {
   try {
-    const response = await fetch(`http://localhost:3000/posts/${postId}`, {
+    const response = await fetch(`${API_URL}/posts/${postId}`, {
       method: "GET",
     });
 

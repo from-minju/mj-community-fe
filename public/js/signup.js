@@ -216,27 +216,6 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
 
-  // 프로필 이미지 등록
-  async function validateProfileImage() {
-    const file = profileImageInput.files[0];
-
-    // 유효성 검사
-    if(!file){
-      return false;
-    }
-    if(file.size > 5 * 1024 * 1024) {
-      alert("파일 크기는 5MB 이하여야 합니다.");
-      return false;
-    }
-    if(!['image/jpeg', 'image/png'].includes(file.type)) {
-      alert('JPEG 또는 PNG 파일만 업로드 가능합니다.');
-      return false;
-    }
-
-    // updateProfileImagePreview();
-
-  }
-
   // 프로필 이미지 띄우기 
   function updateProfileImagePreview(event) {
     const file = event.target.files[0];
