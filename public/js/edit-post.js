@@ -3,9 +3,11 @@ document.addEventListener("DOMContentLoaded", async() =>  {
 
     const titleInput = document.getElementById("titleInput");
     const contentInput = document.getElementById("contentInput");
+    const postImageInput = document.getElementById("postWriteImage");
     
     const titleHelperText = document.getElementById("titleHelperText");
     const contentHelperText = document.getElementById("contentHelperText");
+    const imageNameHelperText = document.getElementById("imageName");
 
     const editPostBtn = document.getElementById("editPostBtn");
 
@@ -38,6 +40,14 @@ document.addEventListener("DOMContentLoaded", async() =>  {
         };
     };
 
+    function updateImageNameHelperText() {
+        if(postImageInput.files.length > 0){
+            imageNameHelperText.style.display = "none";
+        }else{
+            imageNameHelperText.style.display = "block";
+        }
+    }
+
     // 모두 입력했는지 확인, 글자 수 확인 후 버튼 활성화
     function updateEditPostBtn() {
         if(titleInput.value.trim() != "" && contentInput.value.trim() != "" && validateTitle()){
@@ -53,9 +63,12 @@ document.addEventListener("DOMContentLoaded", async() =>  {
     function displayPostDetail(post) {
         titleInput.value = post.title;
         contentInput.value = post.content;
-        // TODO: 이미지 가져와 띄우기
+        // TODO: 기존에 저장되어있는 이미지 파일명 띄우기
         if(post.postImage){
-            document.getElementById("postWriteImage").src = post.postImage;
+            const fullFileName = post.postImage;
+            const fileName = fullFileName.split('-').slice(2).join('-');
+
+            document.getElementById("imageName").textContent = fileName;
         }else{
         
         }
@@ -83,42 +96,34 @@ document.addEventListener("DOMContentLoaded", async() =>  {
 
 
     async function editPost() {
-        try{
-            const API_URL = `http://localhost:3000/posts/${postId}`;
-            const postData = {
-                title: titleInput.value.trim(),
-                content: contentInput.value.trim(),
-                postImage: ""  // TODO:
-            }
+        const API_URL = `http://localhost:3000/posts/${postId}`;
+        const postData = new FormData();
+        postData.append('title', titleInput.value.trim());
+        postData.append('content', contentInput.value.trim());
 
+        if(postImageInput.files[0]){
+            postData.append('postImage', postImageInput.files[0]);
+        }
+
+        try {
             const response = await fetch(API_URL, {
                 method: "PUT",
-                cache: 'no-cache',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(postData), 
+                body: postData,
             });
 
             const { message } = await response.json();
 
-            if (response.ok) {
-                console.log(message);
-                // 수정된 게시물이 정상적으로 수정되었으면 /posts/:postId로 리다이렉트
-                // setTimeout(()=> (window.location.href = `/posts/${postId}`), 1000);
-                window.location.href = `/posts/${postId}`;
-        
-            } else {
-                // 에러 응답인 경우
-                throw new Error(`게시물 수정 실패: ${message || '알 수 없는 오류'}`);
+            if (!response.ok) {
+                throw new Error(`게시글 수정 실패 ${response.status}: ${message || 'Unknown error'}`);
             }
 
+            console.log(message);
+            window.location.href = `/posts/${postId}`;     
 
 
         }catch(error){
             console.error(`게시물 수정 실패`, error);
         }
-
 
     }
 
@@ -131,6 +136,8 @@ document.addEventListener("DOMContentLoaded", async() =>  {
 
     titleInput.addEventListener("input", updateEditPostBtn);
     contentInput.addEventListener("input", updateEditPostBtn);
+
+    postImageInput.addEventListener("change", updateImageNameHelperText);
 
     editPostBtn.addEventListener("click", editPost);
 
