@@ -12,16 +12,17 @@ export const disableBtn = (button) => {
 
 export const checkAuthentication = async() => {
     try {
-        const response = await fetch(`http://localhost:3000/auth/check`, {
+        const API_URL = `http://localhost:3000/auth/check`
+        const response = await fetch(API_URL, {
           method: 'GET',
           credentials: 'include', // 쿠키 포함
         });
 
         if(!response.ok){
-            const {message} = await response.json();
-            alert(message);
-            window.location.href = '/';
-            return;
+            // const {message} = await response.json();
+            // alert(message);
+            // window.location.href = '/';
+            return false;
         }
   
         const { data } = await response.json();
@@ -29,19 +30,40 @@ export const checkAuthentication = async() => {
 
       } catch (error) {
         console.error(error);
-        window.location.href = "/"; 
+        // window.location.href = "/"; 
       }
 }
 
+export const checkAuthAndRedirect = async() => {
+    const result = await checkAuthentication();
+    console.log(result);
 
-// export const enableBtn = () => {
-//     createOrEditCommentBtn.disabled = false;
-//     createOrEditCommentBtn.style.backgroundColor = "#7f6aee";
-//     createOrEditCommentBtn.style.cursor = "pointer";
-//   }
-  
-//   export const disableBtn = () => {
-//     createOrEditCommentBtn.disabled = true;
-//     createOrEditCommentBtn.style.backgroundColor = "#aca0eb";
-//   }
-  
+    if(result){
+        return result;
+    }else{
+        alert("로그인이 필요합니다.");
+        window.location.href = '/';
+        return;
+    }
+}
+
+
+export const logout = async() => {
+    try{
+        const API_URL = `http://localhost:3000/auth/logout`
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            credentials: 'include',
+        })
+
+        if(!response.ok){
+            alert("로그아웃 실패");
+            return;
+        }
+
+        const {message} = await response.json();
+        alert(message);
+    }catch(error){
+        console.error(error);
+    }
+}

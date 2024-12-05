@@ -1,4 +1,4 @@
-import { enableBtn, disableBtn, checkAuthentication } from "./utils.js";
+import { enableBtn, disableBtn, checkAuthentication, checkAuthAndRedirect } from "./utils.js";
 
 const API_URL = window.API_URL || 'http://localhost:3000';
 
@@ -312,7 +312,7 @@ window.addEventListener("click", function (event) {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  checkAuthentication();
+  checkAuthAndRedirect();
   fetchPost();
   fetchComments();
 });
