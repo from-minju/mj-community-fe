@@ -1,10 +1,16 @@
+import { API_BASE_URL } from "./config.js";
+import { getCurrentUser } from "./utils.js";
+
 document.addEventListener("DOMContentLoaded", function(){
+
     
     const deleteAccountBtn = document.getElementById("deleteAccountBtn");
     const closeModalBtn = document.getElementById("closeModal");
     const okModalBtn = document.getElementById("okModal");
     const modalOverlay = document.getElementById("modalOverlay");
+    const email = document.getElementById("email");
     const nicknameInput = document.getElementById("nickname");
+    const profileImagePreview = document.getElementById("profileImagePreview");
     const toastMessage = document.getElementById("toastMessage");
     const editBtn = document.getElementById("submit");
 
@@ -14,14 +20,28 @@ document.addEventListener("DOMContentLoaded", function(){
 
     
 
-
     // 닉네임 중복 검사 
-    function checkNicknameDuplicates() {
+    function isNicknameDuplicates() {
         //TODO: 닉네임이 중복인지 아닌지 확인하는 함수 (리턴: true, false)
         return true;
     };
 
     // 닉네임 유효성 검사
+    function validateNickname() {
+        const nicknameValue = nicknameInput.value.trim();
+        const spaceChkPattern = /\s/g;
+    
+        if(!nicknameValue){return false;}
+    
+        if(nicknameValue && 
+            (nicknameValue.length <= 10) && 
+            !spaceChkPattern.test(nicknameValue) &&
+            isNicknameDuplicates()){
+            return true;
+        }
+        return false;
+      };
+    
     function validateNickname() {
         const nicknameValue = nicknameInput.value.trim();
         const spaceChkPattern = /\s/g;
@@ -33,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function(){
         if(nicknameValue && 
             (nicknameValue.length <= 10) && 
             !spaceChkPattern.test(nicknameValue) &&
-            checkNicknameDuplicates()){
+            isNicknameDuplicates()){
             return true;
         }
         return false;
@@ -49,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function(){
             nicknameHelperText.textContent = "*띄어쓰기를 없애주세요.";
         }else if(nicknameValue.length > 10){
             nicknameHelperText.textContent = "*닉네임은 최대 10자까지 작성 가능합니다.";
-        }else if(!checkNicknameDuplicates){ 
+        }else if(!isNicknameDuplicates){ 
             // TODO: 닉네임 중복 검사
             nicknameHelperText.textContent = "*중복된 닉네임 입니다.";
         }else{
@@ -92,6 +112,18 @@ document.addEventListener("DOMContentLoaded", function(){
             console.log("수정할 수 없습니다.")
         };
 
+        fetchUserInfo();
+
+        // 수정한 후, 헤더 프로필 이미지 업데이트
+    }
+
+    async function fetchUserInfo() {
+        const user = await getCurrentUser();
+        // console.log(user);
+
+        email.textContent = user.email;
+        nicknameInput.value = user.nickname;
+        profileImagePreview.src = `${API_BASE_URL}/uploads/${user.profileImage}`;
     }
 
     /**
@@ -116,8 +148,8 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     });
 
-
-
+    
+    fetchUserInfo();
 
 
     profileImageInput.addEventListener("change", updateProfileImagePreview);

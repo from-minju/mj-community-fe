@@ -17,6 +17,52 @@ document.addEventListener("DOMContentLoaded", function () {
   const signupBtn = document.getElementById("signupBtn");
 
 
+    /**
+   * 중복 검사
+   */
+    async function isEmailDuplicates() {
+      const API_URL = `http://localhost:3000/users/check-email`;
+      const checkEmailData = {
+        email: emailInput.value.trim()
+      };
+  
+      try{
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(checkEmailData)
+        });
+        const data = await response.json();
+  
+        return data.isDuplicate;
+        
+      }catch(error){
+        console.error(error);
+      }
+    };
+  
+    async function isNicknameDuplicates() {
+      const API_URL = `http://localhost:3000/users/check-nickname`;
+      const checkNicknameData = {
+        nickname: nicknameInput.value.trim()
+      };
+  
+      try{
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(checkNicknameData)
+        });
+        const data = await response.json();
+
+        return data.isDuplicate;
+        
+      }catch(error){
+        console.error(error);
+      }
+    };
+
+    
   /**
    * 유효성 검사
    */
@@ -69,57 +115,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if(nicknameValue && 
         (nicknameValue.length <= 10) && 
         !spaceChkPattern.test(nicknameValue) &&
-        isNicknameDuplicates()){
+        !isNicknameDuplicates()){ //TODO: await문제같기도
         return true;
     }
     return false;
   };
 
 
-  /**
-   * 중복 검사
-   */
-  async function isEmailDuplicates() {
-    const API_URL = `http://localhost:3000/users/check-email`;
-    const checkEmailData = {
-      email: emailInput.value.trim()
-    };
-
-    try{
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(checkEmailData)
-      });
-      const data = await response.json();
-
-      return data.isDuplicate;
-      
-    }catch(error){
-      console.error(error);
-    }
-  };
-
-  async function isNicknameDuplicates() {
-    const API_URL = `http://localhost:3000/users/check-nickname`;
-    const checkNicknameData = {
-      nickname: nicknameInput.value.trim()
-    };
-
-    try{
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(checkNicknameData)
-      });
-      const data = await response.json();
-
-      return data.isDuplicate;
-      
-    }catch(error){
-      console.error(error);
-    }
-  };
 
 
   /**
@@ -207,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // 회원가입 버튼 활성화 
-  async function updateSignupBtn (){
+  function updateSignupBtn (){
     if(validateEmail() && validatePassword() && validatePasswordChk() && validateNickname()){
       enableBtn(signupBtn);
     } else{

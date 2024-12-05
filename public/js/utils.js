@@ -10,7 +10,7 @@ export const disableBtn = (button) => {
   button.style.backgroundColor = "#aca0eb";
 }
 
-export const checkAuthentication = async() => {
+export const getCurrentUser = async() => {
     try {
         const API_URL = `http://localhost:3000/auth/check`
         const response = await fetch(API_URL, {
@@ -35,7 +35,7 @@ export const checkAuthentication = async() => {
 }
 
 export const checkAuthAndRedirect = async() => {
-    const result = await checkAuthentication();
+    const result = await getCurrentUser();
     console.log(result);
 
     if(result){

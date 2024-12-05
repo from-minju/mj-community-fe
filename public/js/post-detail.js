@@ -1,4 +1,4 @@
-import { enableBtn, disableBtn, checkAuthentication, checkAuthAndRedirect } from "./utils.js";
+import { enableBtn, disableBtn, checkAuthAndRedirect } from "./utils.js";
 
 const API_URL = window.API_URL || 'http://localhost:3000';
 
@@ -312,7 +312,7 @@ window.addEventListener("click", function (event) {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  checkAuthAndRedirect();
+  checkAuthAndRedirect(); // 세션정보가져와 프로필 이미지 및 드롭다운 업데이트 
   fetchPost();
   fetchComments();
 });

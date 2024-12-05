@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "./config.js";
-import { checkAuthentication, logout } from "./utils.js";
+import { logout } from "./utils.js";
 
 const loginDropdown = document.getElementById("loginDropdown");
 const editProfileDropdown = document.getElementById("editProfileDropdown");

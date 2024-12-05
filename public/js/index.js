@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "./config.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -50,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
         postTitleArea.textContent = post.title;
         leftArea.innerHTML = `좋아요 <span>${formatCnt(post.likes)}</span>  댓글 <span>${formatCnt(post.comments)}</span>  조회수 <span>${formatCnt(post.views)}</span>`;
         rightArea.textContent = post.createdAt;
-        postUserProfile.src = post.profileImage;
+        postUserProfile.src = `${API_BASE_URL}/uploads/${post.profileImage}`;
         postWriterNameArea.textContent = post.nickname;
 
         postMetaArea.append(leftArea, rightArea);
