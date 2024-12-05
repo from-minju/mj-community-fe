@@ -1,4 +1,4 @@
-import { enableBtn, disableBtn } from "./utils.js";
+import { enableBtn, disableBtn, checkAuthentication } from "./utils.js";
 
 const API_URL = window.API_URL || 'http://localhost:3000';
 
@@ -294,10 +294,7 @@ async function createOrEditComment() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  fetchPost();
-  fetchComments();
-});
+
 
 editPostBtn.addEventListener("click", editPost);
 deletePostBtn.addEventListener("click", deletePost);
@@ -312,4 +309,10 @@ window.addEventListener("click", function (event) {
   } else if (event.target === commentModalOverlay) {
     commentModalOverlay.style.display = "none";
   }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  checkAuthentication();
+  fetchPost();
+  fetchComments();
 });
