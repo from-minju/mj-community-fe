@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "./config.js";
-import { getCurrentUser } from "./utils.js";
+import { disableBtn, enableBtn, getCurrentUser } from "./utils.js";
+// import { updateNicknameHelperText } from "./validation.js";
 
 document.addEventListener("DOMContentLoaded", function(){
 
@@ -20,64 +21,87 @@ document.addEventListener("DOMContentLoaded", function(){
 
     
 
-    // 닉네임 중복 검사 
-    function isNicknameDuplicates() {
-        //TODO: 닉네임이 중복인지 아닌지 확인하는 함수 (리턴: true, false)
-        return true;
+    async function isNicknameDuplicates() {
+        const API_URL = `${API_BASE_URL}/users/check-nickname`;
+        const checkNicknameData = {
+          nickname: nicknameInput.value.trim()
+        };
+    
+        try{
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(checkNicknameData)
+          });
+          const data = await response.json();
+    
+          return data.isDuplicate;
+          
+        }catch(error){
+          console.error(error);
+        }
     };
 
-    // 닉네임 유효성 검사
-    function validateNickname() {
+    async function validateNickname() {
         const nicknameValue = nicknameInput.value.trim();
         const spaceChkPattern = /\s/g;
+        
+        const hasSpacesResult = spaceChkPattern.test(nicknameValue)
+        const isNicknameDuplicatesResult = await isNicknameDuplicates();
     
         if(!nicknameValue){return false;}
     
         if(nicknameValue && 
-            (nicknameValue.length <= 10) && 
-            !spaceChkPattern.test(nicknameValue) &&
-            isNicknameDuplicates()){
+            nicknameValue.length <= 10 && 
+            ! hasSpacesResult &&
+            ! isNicknameDuplicatesResult ){ //TODO: await문제같기도
             return true;
         }
-        return false;
-      };
-    
-    function validateNickname() {
-        const nicknameValue = nicknameInput.value.trim();
-        const spaceChkPattern = /\s/g;
-    
-        // TODO: 닉네임 유효성 중복 검사
-    
-        if(!nicknameValue){return false;}
-    
-        if(nicknameValue && 
-            (nicknameValue.length <= 10) && 
-            !spaceChkPattern.test(nicknameValue) &&
-            isNicknameDuplicates()){
-            return true;
-        }
+        
         return false;
     };
 
-    function updateNicknameHelperText() {
+    async function updateNicknameHelperText() {
         const nicknameValue = nicknameInput.value.trim();
         const spaceChkPattern = /\s/g;
     
         if(!nicknameValue){
-            nicknameHelperText.textContent = "*닉네임을 입력해주세요.";
-        }else if(spaceChkPattern.test(nicknameValue)){
-            nicknameHelperText.textContent = "*띄어쓰기를 없애주세요.";
-        }else if(nicknameValue.length > 10){
-            nicknameHelperText.textContent = "*닉네임은 최대 10자까지 작성 가능합니다.";
-        }else if(!isNicknameDuplicates){ 
-            // TODO: 닉네임 중복 검사
-            nicknameHelperText.textContent = "*중복된 닉네임 입니다.";
-        }else{
-            nicknameHelperText.textContent = "";
+          nicknameHelperText.textContent = "*닉네임을 입력해주세요.";
+          return;
         }
+    
+        if(spaceChkPattern.test(nicknameValue)){
+          nicknameHelperText.textContent = "*띄어쓰기를 없애주세요.";
+          return;
+        }
+    
+        if(nicknameValue.length > 10){
+          nicknameHelperText.textContent = "*닉네임은 최대 10자까지 작성 가능합니다.";
+          return;
+        }
+    
+        const isDuplicate = await isNicknameDuplicates();
+        if(isDuplicate){
+          nicknameHelperText.textContent = "*중복된 닉네임 입니다.";
+          return;
+        }
+    
+        nicknameHelperText.textContent = "";
     };
 
-    // 토스트메시지 띄우기
+    async function updateEditBtn() {
+        const isNicknameValidates = await validateNickname();
+        
+        if(isNicknameValidates){
+            console.log("버튼 활성화!")
+            enableBtn(editBtn);
+        }else{
+            console.log("버튼 비활성화!")
+            disableBtn(editBtn);
+        }
+    }
+
+
     function toastOn() {
         toastMessage.style.display = "flex";
         setTimeout(function() {
@@ -85,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function(){
         }, 1000);
     }
 
-    // 프로필 이미지 띄우기
     function updateProfileImagePreview(event) {
         const file = event.target.files[0];
         const profileImagePreview = document.getElementById("profileImagePreview");
@@ -103,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     };
 
-    // 수정 
+    // 프로필 수정 
     function editProfile(event){
         event.preventDefault();
         if(validateNickname()){
@@ -119,7 +142,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
     async function fetchUserInfo() {
         const user = await getCurrentUser();
-        // console.log(user);
 
         email.textContent = user.email;
         nicknameInput.value = user.nickname;
@@ -149,11 +171,17 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
     
+
     fetchUserInfo();
 
-
+    //Helper Text
     profileImageInput.addEventListener("change", updateProfileImagePreview);
     nicknameInput.addEventListener("blur", updateNicknameHelperText);
+
+    // 수정 버튼 활성화
+    nicknameInput.addEventListener("input", updateEditBtn);
+
+    // 프로필 수정
     editBtn.addEventListener("click", editProfile);
 
 });

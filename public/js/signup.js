@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "./config.js";
 import { enableBtn, disableBtn } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -42,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   
     async function isNicknameDuplicates() {
-      const API_URL = `http://localhost:3000/users/check-nickname`;
+      const API_URL = `${API_BASE_URL}/users/check-nickname`;
       const checkNicknameData = {
         nickname: nicknameInput.value.trim()
       };
@@ -54,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
           body: JSON.stringify(checkNicknameData)
         });
         const data = await response.json();
-
+  
         return data.isDuplicate;
         
       }catch(error){
@@ -106,18 +107,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  function validateNickname() {
+  async function validateNickname() {
     const nicknameValue = nicknameInput.value.trim();
     const spaceChkPattern = /\s/g;
+    
+    const hasSpacesResult = spaceChkPattern.test(nicknameValue)
+    const isNicknameDuplicatesResult = await isNicknameDuplicates();
 
     if(!nicknameValue){return false;}
 
     if(nicknameValue && 
-        (nicknameValue.length <= 10) && 
-        !spaceChkPattern.test(nicknameValue) &&
-        !isNicknameDuplicates()){ //TODO: await문제같기도
+        nicknameValue.length <= 10 && 
+        ! hasSpacesResult &&
+        ! isNicknameDuplicatesResult ){ //TODO: await문제같기도
         return true;
     }
+    
     return false;
   };
 
@@ -209,8 +214,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // 회원가입 버튼 활성화 
-  function updateSignupBtn (){
-    if(validateEmail() && validatePassword() && validatePasswordChk() && validateNickname()){
+  async function updateSignupBtn (){
+    if(validateEmail() && validatePassword() && validatePasswordChk() && await validateNickname()){
       enableBtn(signupBtn);
     } else{
       disableBtn(signupBtn);

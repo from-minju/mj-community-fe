@@ -76,12 +76,10 @@ document.addEventListener("DOMContentLoaded", function(){
             if(response.ok){
                 alert(message);
                 window.location.href = `http://localhost:8000/posts`; 
-                
             }else if (response.status === 401){
                 alert(message);
-
             }else{
-
+                alert("이메일 또는 비밀번호가 틀렸습니다.");
             }
 
         }catch(error){
