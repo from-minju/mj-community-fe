@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "./config.js";
 import { fetchUserProfileDropdown } from "./dropdown.js";
-import { disableBtn, enableBtn, getCurrentUser } from "./utils.js";
+import { checkAuthAndRedirect, disableBtn, enableBtn, getCurrentUser } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", function(){
 
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
     
-
+    checkAuthAndRedirect();
     fetchUserInfo();
 
     //Helper Text

@@ -2,6 +2,7 @@ import { API_BASE_URL } from "./config.js";
 import { logout } from "./utils.js";
 
 const loginDropdown = document.getElementById("loginDropdown");
+const signupDropdown = document.getElementById("signupDropdown");
 const editProfileDropdown = document.getElementById("editProfileDropdown");
 const changePasswordDropdown = document.getElementById("changePasswordDropdown");
 const logoutDropdown = document.getElementById("logoutDropdown");
@@ -12,6 +13,8 @@ const userProfileImage = document.getElementById("userProfileImg");
 
 const showLoginStatusBtn = () => {
     loginDropdown.style.display = "none";
+    signupDropdown.style.display = "none";
+
     editProfileDropdown.style.display = "block";
     changePasswordDropdown.style.display = "block";
     logoutDropdown.style.display = "block";
@@ -19,6 +22,8 @@ const showLoginStatusBtn = () => {
 
 const showLogoutStatusBtn = () => {
     loginDropdown.style.display = "block";
+    signupDropdown.style.display = "block";
+
     editProfileDropdown.style.display = "none";
     changePasswordDropdown.style.display = "none";
     logoutDropdown.style.display = "none";
@@ -58,6 +63,10 @@ export const fetchUserProfileDropdown = async() => {
 
 loginDropdown.addEventListener("click", () => {
     window.location.href = '/auth/login';
+});
+
+signupDropdown.addEventListener("click", () => {
+    window.location.href = '/auth/signup';
 });
 
 editProfileDropdown.addEventListener("click", () => {
