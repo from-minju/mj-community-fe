@@ -1,3 +1,6 @@
+import { API_BASE_URL } from "./config.js";
+import { checkAuthAndRedirect } from "./utils.js";
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const titleInput = document.getElementById("titleInput");
@@ -51,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     async function createPost() {
-        const API_URL = `http://localhost:3000/posts`;
+        const API_URL = `${API_BASE_URL}/posts`;
         const postData = new FormData();
         postData.append('title', titleInput.value.trim());
         postData.append('content', contentInput.value.trim());
@@ -63,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try{
             const response = await fetch(API_URL, {
                 method: "POST",
+                credentials: "include",
                 body: postData
             });
 
@@ -81,6 +85,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
+
+    checkAuthAndRedirect();
 
 
     titleInput.addEventListener("input", updateTitleHelperText);

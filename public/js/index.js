@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./config.js";
+import { API_BASE_URL, API_IMAGE_URL } from "./config.js";
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", function () {
    */
   async function fetchPosts() {
     try {
-      const response = await fetch('http://localhost:3000/posts', {
+      const API_URL = `${API_BASE_URL}/posts`
+      const response = await fetch(API_URL, {
         method: "GET",
       });
       const {data: posts} = await response.json();
@@ -51,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
         postTitleArea.textContent = post.title;
         leftArea.innerHTML = `좋아요 <span>${formatCnt(post.likes)}</span>  댓글 <span>${formatCnt(post.comments)}</span>  조회수 <span>${formatCnt(post.views)}</span>`;
         rightArea.textContent = post.createdAt;
-        postUserProfile.src = `${API_BASE_URL}/uploads/${post.profileImage}`;
+        postUserProfile.src = `${API_IMAGE_URL}/${post.profileImage}`;
         postWriterNameArea.textContent = post.nickname;
 
         postMetaArea.append(leftArea, rightArea);
