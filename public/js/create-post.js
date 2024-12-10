@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     };
 
-    // 모두 입력했는지 확인, 글자 수 확인 후 버튼 활성화
+
     function updateCreatePostBtn() {
         if(titleInput.value.trim() != "" && contentInput.value.trim() != "" && validateTitle()){
             createPostBtn.style.backgroundColor = "#7f6aee";
@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error('게시물 작성 실패');
         }
     };
+
 
 
     titleInput.addEventListener("input", updateTitleHelperText);

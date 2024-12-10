@@ -193,6 +193,7 @@ async function fetchPost() {
   try {
     const response = await fetch(`${API_URL}/posts/${postId}`, {
       method: "GET",
+      credentials: "include"
     });
 
     if (!response.ok) {
@@ -221,6 +222,7 @@ async function fetchComments() {
       `http://localhost:3000/posts/${postId}/comments`,
       {
         method: "GET",
+        credentials: "include"
       }
     );
 
@@ -312,7 +314,7 @@ window.addEventListener("click", function (event) {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  checkAuthAndRedirect(); // 세션정보가져와 프로필 이미지 및 드롭다운 업데이트 
+  // checkAuthAndRedirect();
   fetchPost();
   fetchComments();
 });

@@ -16,11 +16,13 @@
                     <a href="/posts" class="headerText">아무 말 대잔치</a>
                     <div class="headerProfile">
                         <div class="userProfile">
-                            <img id="userProfileImg" src="/images/circle-user.png" class="userProfile" alt="userProfile" />
+                            <img id="userProfileImg" src="" class="userProfile" alt="userProfile" />
                             <div class="dropdown" id="dropdown">
-                                <a href="/users/user-id/edit-profile" class="dropdownOption">회원정보수정</a>
-                                <a href="/users/user-id/change-password" class="dropdownOption">비밀번호수정</a>
-                                <a href="/" class="dropdownOption">로그아웃</a>
+                                <div class="dropdownOption" id="loginDropdown">로그인</div>
+                                <div class="dropdownOption" id="signupDropdown">회원가입</div>
+                                <div class="dropdownOption" id="editProfileDropdown">회원정보수정</div>
+                                <div class="dropdownOption" id="changePasswordDropdown">비밀번호수정</div>
+                                <div class="dropdownOption" id="logoutDropdown">로그아웃</div>
                             </div>
                         </div>
                     </div>
@@ -55,7 +57,8 @@
         </article>
 
         <script src="/js/header.js"></script>
-        <script src="/js/edit-post.js"></script>
+        <script src="/js/dropdown.js" type="module"></script>
+        <script src="/js/edit-post.js" type="module"></script>
 
     </body>
 </html>

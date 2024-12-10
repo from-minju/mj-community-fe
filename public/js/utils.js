@@ -19,9 +19,6 @@ export const getCurrentUser = async() => {
         });
 
         if(!response.ok){
-            // const {message} = await response.json();
-            // alert(message);
-            // window.location.href = '/';
             return false;
         }
   
@@ -30,12 +27,13 @@ export const getCurrentUser = async() => {
 
       } catch (error) {
         console.error(error);
-        // window.location.href = "/"; 
       }
 }
 
 export const checkAuthAndRedirect = async() => {
     const result = await getCurrentUser();
+
+    // 디버깅용
     console.log(result);
 
     if(result){

@@ -134,6 +134,10 @@ hr {
     padding-bottom: 100px;
 }
 
+
+/*
+ * *********** 댓글 *************
+ */
 .writeCommentContainer {
     background-color: #FFFFFF;
     border-radius: 16px;
