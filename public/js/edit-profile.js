@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const nicknameHelperText = document.getElementById("nicknameHelperText");
 
-    
+    let isProfileImageChanged = false;
 
     async function isNewNicknameDuplicates() {
         const API_URL = `${API_BASE_URL}/users/check-nickname`;
@@ -128,12 +128,10 @@ document.addEventListener("DOMContentLoaded", function(){
     // 프로필 수정 
     async function editProfile(){
         const API_URL = `${API_BASE_URL}/users/profile`;
-        const editedUserData = new FormData();
-        editedUserData.append('nickname', nicknameInput.value.trim());
-
-        if(profileImageInput.files[0]){
-            editedUserData.append('profileImage', profileImageInput.files[0]);
-        }
+        const formData = new FormData();
+        formData.append('nickname', nicknameInput.value.trim());
+        formData.append('isProfileImageChanged', isProfileImageChanged);
+        formData.append('profileImage', profileImageInput.files[0]);
 
         try{
 
@@ -144,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const response = await fetch(API_URL, {
                 method: "PUT",
                 credentials: 'include',
-                body: editedUserData,
+                body: formData,
             })
 
             if(!response.ok){
@@ -201,6 +199,10 @@ document.addEventListener("DOMContentLoaded", function(){
     // 수정 버튼 활성화
     profileImageInput.addEventListener("change", updateEditBtn);
     nicknameInput.addEventListener("input", updateEditBtn);
+
+    profileImageInput.addEventListener("change", () => {
+        isProfileImageChanged = true;
+    });
 
     // 프로필 수정
     editBtn.addEventListener("click", editProfile);
