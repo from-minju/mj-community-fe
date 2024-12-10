@@ -1,4 +1,5 @@
-import { enableBtn, disableBtn, checkAuthAndRedirect } from "./utils.js";
+import { API_IMAGE_URL, DefaultProfileImageName } from "./config.js";
+import { enableBtn, disableBtn, checkAuthAndRedirect, getFilePath } from "./utils.js";
 
 const API_URL = window.API_URL || 'http://localhost:3000';
 
@@ -165,7 +166,7 @@ function displayComments(comments) {
     deleteCommentBtn.className = "editRemoveBtn";
 
     // 컨테이너 구성하기
-    userProfile.src = comment.profileImage || "/images/circle-user.png"; // TODO: 기본프사 경로 설정 다시하기
+    userProfile.src = getFilePath(comment.profileImage) || getFilePath(DefaultProfileImageName);
     writerName.textContent = comment.nickname;
     createdTime.textContent = comment.createdAt;
     commentContent.innerHTML = comment.content;

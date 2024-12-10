@@ -1,3 +1,4 @@
+import { API_IMAGE_URL } from "./config.js";
 
 export const enableBtn = (button) => {
   button.disabled = false;
@@ -65,3 +66,7 @@ export const logout = async() => {
         console.error(error);
     }
 }
+
+export const getFilePath = (fileName) => {
+    return `${API_IMAGE_URL}/${fileName}`;
+  }
