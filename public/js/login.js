@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const {message} = await response.json();
 
             if(response.ok){
-                alert(message);
+                // alert(message);
                 window.location.href = `http://localhost:8000/posts`; 
             }else if (response.status === 401){
                 alert(message);

@@ -1,5 +1,5 @@
-import { API_IMAGE_URL, DefaultProfileImageName } from "./config.js";
-import { enableBtn, disableBtn, checkAuthAndRedirect, getFilePath } from "./utils.js";
+import { API_BASE_URL, API_IMAGE_URL, DefaultProfileImageName } from "./config.js";
+import { enableBtn, disableBtn, checkAuthAndRedirect, getFilePath, getCurrentUser } from "./utils.js";
 
 const API_URL = window.API_URL || 'http://localhost:3000';
 
@@ -22,6 +22,9 @@ const okCommentModalBtn = document.getElementById("okCommentModal");
 
 const commentTextArea = document.getElementById("writeCommentArea");
 const createOrEditCommentBtn = document.getElementById("writeCommentBtn");
+
+let currentUser = null;
+
 
 let editingCommentId = false;
 
@@ -108,6 +111,28 @@ function handleDeleteCommentBtn(commentId) {
 }
 
 function displayPost(post) {
+  const isPostAuthor = currentUser && post.postAuthorId === currentUser.userId;
+
+  // 게시글 작성자만 수정, 삭제 버튼을 생성하도록 처리
+  if (isPostAuthor) {
+    const editPostBtn = document.createElement("button");
+    editPostBtn.className = "editRemoveBtn";
+    editPostBtn.textContent = "수정";
+
+    const deletePostBtn = document.createElement("button");
+    deletePostBtn.className = "editRemoveBtn";
+    deletePostBtn.textContent = "삭제";
+
+    // 컨테이너 구성하기
+    const postEditRemoveBtnContainer = document.querySelector(".postEditRemoveBtnContainer");
+    postEditRemoveBtnContainer.appendChild(editPostBtn);
+    postEditRemoveBtnContainer.appendChild(deletePostBtn);
+
+    // 이벤트 리스너
+    editPostBtn.addEventListener("click", editPost);
+    deletePostBtn.addEventListener("click", deletePost);
+  }
+
   document.querySelector(".postTitle").textContent = post.title;
   document.getElementById("postWriterProfileImage").src = `${API_URL}/uploads/${post.profileImage}`;
   document.getElementById("postWriterName").textContent = post.nickname;
@@ -121,6 +146,8 @@ function displayPost(post) {
   document.getElementById("likesCnt").textContent = formatCnt(post.likes);
   document.getElementById("viewsCnt").textContent = formatCnt(post.views);
   document.getElementById("commentsCnt").textContent = formatCnt(post.comments);
+
+
 }
 
 function displayComments(comments) {
@@ -131,6 +158,8 @@ function displayComments(comments) {
 
   //HTML 생성
   comments.forEach((comment) => {
+    const isCommentAuthor = currentUser && comment.commentAuthorId === currentUser.userId;
+    
     const commentContainer = document.createElement("div");
     commentContainer.className = "commentContainer";
     commentContainer.setAttribute("data-comment-id", comment.commentId);
@@ -144,9 +173,6 @@ function displayComments(comments) {
     const metaLeftContainer = document.createElement("div");
     metaLeftContainer.className = "metaLeftContainer";
 
-    const editRemoveBtnContainer = document.createElement("div");
-    editRemoveBtnContainer.className = "editRemoveBtnContainer";
-
     const writerArea = document.createElement("div");
     writerArea.className = "writerArea";
 
@@ -159,38 +185,58 @@ function displayComments(comments) {
     const writerName = document.createElement("p");
     writerName.className = "writerName";
 
-    const editCommentBtn = document.createElement("button");
-    editCommentBtn.className = "editRemoveBtn";
 
-    const deleteCommentBtn = document.createElement("button");
-    deleteCommentBtn.className = "editRemoveBtn";
 
     // 컨테이너 구성하기
     userProfile.src = getFilePath(comment.profileImage) || getFilePath(DefaultProfileImageName);
     writerName.textContent = comment.nickname;
     createdTime.textContent = comment.createdAt;
     commentContent.innerHTML = comment.content;
-    editCommentBtn.textContent = "수정";
-    deleteCommentBtn.textContent = "삭제";
+
 
     writerArea.append(userProfile, writerName);
     metaLeftContainer.append(writerArea, createdTime);
-    editRemoveBtnContainer.append(editCommentBtn, deleteCommentBtn);
-    metaContainer.append(metaLeftContainer, editRemoveBtnContainer);
+    metaContainer.append(metaLeftContainer);
     commentContainer.append(metaContainer, commentContent);
     commentsContainer.append(commentContainer);
 
-    editCommentBtn.addEventListener("click", () => {
-      handleEditCommentBtn(comment.commentId, comment.content);
-    });
-    deleteCommentBtn.addEventListener("click", () => {
-      handleDeleteCommentBtn(comment.commentId);
-    });
+
+    // 댓글 작성자만 수정, 삭제 버튼을 생성하도록 처리
+    if(isCommentAuthor){
+      const editCommentBtn = document.createElement("button");
+      editCommentBtn.className = "editRemoveBtn";
+      editCommentBtn.textContent = "수정";
+  
+      const deleteCommentBtn = document.createElement("button");
+      deleteCommentBtn.className = "editRemoveBtn";
+      deleteCommentBtn.textContent = "삭제";
+
+      // 컨테이너 구성하기
+      const editRemoveBtnContainer = document.createElement("div");
+      editRemoveBtnContainer.className = "editRemoveBtnContainer";
+
+      editRemoveBtnContainer.append(editCommentBtn, deleteCommentBtn);
+      metaContainer.append(metaLeftContainer, editRemoveBtnContainer);
+
+
+      // 이벤트 리스너 
+      editCommentBtn.addEventListener("click", () => {
+        handleEditCommentBtn(comment.commentId, comment.content);
+      });
+      deleteCommentBtn.addEventListener("click", () => {
+        handleDeleteCommentBtn(comment.commentId);
+      });
+
+    }
+
   });
 }
 
+
+
 // 게시물 상세 내용 가져오기
 async function fetchPost() {
+
   try {
     const response = await fetch(`${API_URL}/posts/${postId}`, {
       method: "GET",
@@ -205,7 +251,7 @@ async function fetchPost() {
     }
 
     const { data: post } = await response.json();
-    displayPost(post);
+    displayPost(post, currentUser);
 
   } catch (error) {
     console.error(
@@ -220,7 +266,7 @@ async function fetchComments() {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/posts/${postId}/comments`,
+      `${API_BASE_URL}/posts/${postId}/comments`,
       {
         method: "GET",
         credentials: "include"
@@ -258,8 +304,8 @@ async function createOrEditComment() {
   if (!commentTextArea.value.trim()) return;
 
   const API_URL = !editingCommentId
-    ? `http://localhost:3000/posts/${postId}/comments`
-    : `http://localhost:3000/posts/${postId}/comments/${editingCommentId}`;
+    ? `${API_BASE_URL}/posts/${postId}/comments`
+    : `${API_BASE_URL}/posts/${postId}/comments/${editingCommentId}`;
 
   const method = !editingCommentId ? "POST" : "PUT";
   const commentData = {
@@ -269,16 +315,21 @@ async function createOrEditComment() {
   try {
     const response = await fetch(API_URL, {
       method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify(commentData),
     });
+
+    if(response.status === 401){
+      alert("로그인이 필요합니다.");
+      commentTextArea.value = "";
+      disableBtn(createOrEditCommentBtn);
+    }
 
     if (!response.ok) {
       const { message } = await response.json();
       throw new Error(
-        `Error ${response.status}: ${message || "Unknown error"}`
+        `${response.status}: ${message || "Unknown error"}`
       );
     }
 
@@ -290,17 +341,18 @@ async function createOrEditComment() {
     commentTextArea.value = "";
 
     await response.json();
-    fetchPost();
+    fetchPost(); //TODO: 현재 사용자 정보 넘기기
     fetchComments();
+
   } catch (error) {
     console.error("댓글 등록 또는 수정 실패", error);
+    disableBtn(createOrEditCommentBtn);
   }
 }
 
 
 
-editPostBtn.addEventListener("click", editPost);
-deletePostBtn.addEventListener("click", deletePost);
+
 
 commentTextArea.addEventListener("input", updateCreateCommentBtn);
 createOrEditCommentBtn.addEventListener("click", createOrEditComment);
@@ -314,8 +366,14 @@ window.addEventListener("click", function (event) {
   }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  // checkAuthAndRedirect();
+document.addEventListener('DOMContentLoaded', async() => {
+  currentUser = await getCurrentUser();
+
+  if(!currentUser){
+    alert("로그인이 필요합니다.");
+    window.location.href = '/auth/login';
+  }
+
   fetchPost();
   fetchComments();
 });

@@ -1,4 +1,4 @@
-import { API_IMAGE_URL } from "./config.js";
+import { API_BASE_URL, API_IMAGE_URL } from "./config.js";
 
 export const enableBtn = (button) => {
   button.disabled = false;
@@ -13,7 +13,7 @@ export const disableBtn = (button) => {
 
 export const getCurrentUser = async() => {
     try {
-        const API_URL = `http://localhost:3000/auth/check`
+        const API_URL = `${API_BASE_URL}/auth/check`
         const response = await fetch(API_URL, {
           method: 'GET',
           credentials: 'include', // 쿠키 포함
@@ -23,8 +23,8 @@ export const getCurrentUser = async() => {
             return false;
         }
   
-        const { data } = await response.json();
-        return data;
+        const { data: user } = await response.json();
+        return user;
 
       } catch (error) {
         console.error(error);
@@ -32,16 +32,13 @@ export const getCurrentUser = async() => {
 }
 
 export const checkAuthAndRedirect = async() => {
-    const result = await getCurrentUser();
+    const user = await getCurrentUser();
 
-    // 디버깅용
-    console.log(result);
-
-    if(result){
-        return result;
+    if(user){
+        return user;
     }else{
         alert("로그인이 필요합니다.");
-        window.location.href = '/';
+        window.location.href = '/auth/login';
         return;
     }
 }
