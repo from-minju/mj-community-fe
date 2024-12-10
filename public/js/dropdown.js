@@ -70,8 +70,12 @@ signupDropdown.addEventListener("click", () => {
 });
 
 editProfileDropdown.addEventListener("click", () => {
-    window.location.href = '/users/edit-profile';
+    window.location.href = '/users/profile';
 });
+
+changePasswordDropdown.addEventListener("click", () => {
+    window.location.href = '/users/profile/password'
+})
 
 logoutDropdown.addEventListener("click", () => {
     logout();
