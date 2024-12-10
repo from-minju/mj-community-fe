@@ -25,7 +25,7 @@ const showLogoutStatusBtn = () => {
 }
 
 
-const fetchUserProfileDropdown = async() => {
+export const fetchUserProfileDropdown = async() => {
     try{
         const API_URL = `${API_BASE_URL}/auth/check`;
         const response = await fetch(API_URL, {

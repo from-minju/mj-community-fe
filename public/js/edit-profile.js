@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "./config.js";
+import { fetchUserProfileDropdown } from "./dropdown.js";
 import { disableBtn, enableBtn, getCurrentUser } from "./utils.js";
-// import { updateNicknameHelperText } from "./validation.js";
 
 document.addEventListener("DOMContentLoaded", function(){
 
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     async function updateEditBtn() {
         const isNicknameValidates = await validateNickname();
-        
+
         if(isNicknameValidates){
             console.log("버튼 활성화!")
             enableBtn(editBtn);
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function(){
         toastMessage.style.display = "flex";
         setTimeout(function() {
             toastMessage.style.display = "none";
-        }, 1000);
+        }, 1500);
     }
 
     function updateProfileImagePreview(event) {
@@ -127,17 +127,38 @@ document.addEventListener("DOMContentLoaded", function(){
     };
 
     // 프로필 수정 
-    function editProfile(event){
-        event.preventDefault();
-        if(validateNickname()){
+    async function editProfile(){
+        const API_URL = `${API_BASE_URL}/users/profile`;
+        const editedUserData = new FormData();
+        editedUserData.append('nickname', nicknameInput.value.trim());
+
+        if(profileImageInput.files[0]){
+            editedUserData.append('profileImage', profileImageInput.files[0]);
+        }
+
+        try{
+
+            if(! await validateNickname()){
+                return;
+            }
+
+            const response = await fetch(API_URL, {
+                method: "PUT",
+                credentials: 'include',
+                body: editedUserData,
+            })
+
+            if(!response.ok){
+                alert("회원정보 수정에 실패하였습니다.");
+            }
+
             toastOn();
-        }else{
-            console.log("수정할 수 없습니다.")
-        };
+            fetchUserInfo();
+            fetchUserProfileDropdown();
 
-        fetchUserInfo();
-
-        // 수정한 후, 헤더 프로필 이미지 업데이트
+        }catch(error){
+            console.error(error);
+        }
     }
 
     async function fetchUserInfo() {
