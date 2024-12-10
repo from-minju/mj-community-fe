@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     
 
-    async function isNicknameDuplicates() {
+    async function isNewNicknameDuplicates() {
         const API_URL = `${API_BASE_URL}/users/check-nickname`;
         const checkNicknameData = {
           nickname: nicknameInput.value.trim()
@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function(){
         try{
           const response = await fetch(API_URL, {
             method: "POST",
+            credentials: "include",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(checkNicknameData)
           });
@@ -47,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function(){
         const spaceChkPattern = /\s/g;
         
         const hasSpacesResult = spaceChkPattern.test(nicknameValue)
-        const isNicknameDuplicatesResult = await isNicknameDuplicates();
+        const isNicknameDuplicatesResult = await isNewNicknameDuplicates();
     
         if(!nicknameValue){return false;}
     
@@ -80,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function(){
           return;
         }
     
-        const isDuplicate = await isNicknameDuplicates();
+        const isDuplicate = await isNewNicknameDuplicates();
         if(isDuplicate){
           nicknameHelperText.textContent = "*중복된 닉네임 입니다.";
           return;
@@ -93,10 +94,8 @@ document.addEventListener("DOMContentLoaded", function(){
         const isNicknameValidates = await validateNickname();
 
         if(isNicknameValidates){
-            console.log("버튼 활성화!")
             enableBtn(editBtn);
         }else{
-            console.log("버튼 비활성화!")
             disableBtn(editBtn);
         }
     }
@@ -197,9 +196,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
     //Helper Text
     profileImageInput.addEventListener("change", updateProfileImagePreview);
-    nicknameInput.addEventListener("blur", updateNicknameHelperText);
+    nicknameInput.addEventListener("input", updateNicknameHelperText);
 
     // 수정 버튼 활성화
+    profileImageInput.addEventListener("change", updateEditBtn);
     nicknameInput.addEventListener("input", updateEditBtn);
 
     // 프로필 수정

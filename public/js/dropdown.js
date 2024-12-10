@@ -72,18 +72,4 @@ logoutDropdown.addEventListener("click", () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchUserProfileDropdown();
-    // const user = checkAuthentication();
-    // console.log(user);
-    // if(!user){ // 로그인안된 상태
-    //     showLogoutStatusBtn();
-    // }else{ // 로그인된 상태
-    //     showLoginStatusBtn();
-    // }
 });
-
-
-
-/**
- * 회원정보 가져오기. 로그인 세션 정보.
- * 
- */
