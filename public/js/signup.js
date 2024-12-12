@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
   emailInput.addEventListener("blur", updateEmailHelperText);
   passwordInput.addEventListener("blur", updatePasswordHelperText);
   passwordChkInput.addEventListener("blur", updatePasswordChkHelperText);
-  nicknameInput.addEventListener("blur", updateNicknameHelperText);
+  nicknameInput.addEventListener("input", updateNicknameHelperText);
   profileImageInput.addEventListener("change", updateProfileImageHelperText);
 
   // 회원가입 버튼 활성화

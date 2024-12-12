@@ -11,17 +11,19 @@
     <header id="header">
         <div class="header">
             <div class="headerContent">
-                <div class="headerLeft" id="headerLeft">
-                    <a href="/auth/login">
-                        <img id="headerLeft" src="/images/angle-left.png" class="headerLeft" alt="headerLeft" />
-                    </a>
+                <div class="headerLeft">
+                    <img id="headerLeft" src="/images/angle-left.png" class="headerLeft" alt="headerLeft" onclick="history.back()"/>
                 </div>
                 <a href="/posts" class="headerText">아무 말 대잔치</a>
                 <div class="headerProfile">
+                    <div class="userProfile">
+                        <img id="userProfileImg" src="" class="userProfile" alt="userProfile" style="display: none;"/>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
+
     <article>
         <div class="wrap2">
             <h1>회원가입</h1>
@@ -35,7 +37,7 @@
                         <div class="addImageHelperArea">
                             <img id="plusImage" src="/images/add.png" />
                         </div>
-                        <img id="profileImagePreview" src="/images/bunny.jpg" />
+                        <img id="profileImagePreview" src="" />
                     </div>
                     <input id="profileImage" type="file" accept="image/png, image/jpeg" style="display: none;">    
                 </label>
