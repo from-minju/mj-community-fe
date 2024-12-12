@@ -260,10 +260,7 @@ async function fetchPost() {
     displayPost(post, currentUser);
 
   } catch (error) {
-    console.error(
-      `[fetchPost Error] 게시물 ${postId}에 대한 상세 데이터를 가져올 수 없습니다.`,
-      error
-    );
+    console.error(`[fetchPost Error] 게시물 ${postId}에 대한 상세 데이터를 가져올 수 없습니다.`, error);
   }
 }
 
@@ -327,15 +324,55 @@ async function fetchLikes() {
   }
 }
 
-function updateLikesBtn() {
+async function likePost(){
+  const API_URL = `${API_BASE_URL}/posts/${postId}/likes`;
+  try{
+    const response = await fetch(API_URL, {
+      method: "POST",
+      credentials: "include"
+    });
+
+    if(!response.status){
+      const { message } = await response.json();
+      alert(message);
+    }
+
+  }catch(error){
+    console.error(`[likePost Error] 게시물 ${postId}에 대해 좋아요를 누를 수 없습니다.`, error);
+
+  }
+}
+
+async function dislikePost(){
+  const API_URL = `${API_BASE_URL}/posts/${postId}/likes`;
+  try{
+    const response = await fetch(API_URL, {
+      method: "DELETE",
+      credentials: "include"
+    });
+
+    if(!response.status){
+      const { message } = await response.json();
+      alert(message);
+    }
+
+  }catch(error){
+    console.error(`[dislikePost Error] 게시물 ${postId}에 대해 좋아요를 취소할 수 없습니다.`, error);
+  }
+
+}
+
+async function updateLikesBtn() {
   likesBtn.classList.toggle('liked');
 
   if(likesBtn.classList.contains('liked')){
     console.log("좋아요 눌림");
+    await likePost();
   }else{
     console.log("좋아요 취소");
+    await dislikePost();
   }
-
+  fetchLikes();
 }
 
 function updateCreateCommentBtn() {
