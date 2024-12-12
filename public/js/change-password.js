@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "./config.js";
+
 document.addEventListener("DOMContentLoaded", function(){
     const passwordInput = document.getElementById("password");
     const passwordChkInput = document.getElementById("passwordChk");
@@ -81,24 +83,45 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     // 비밀번호 변경하기
-    function changePassword(event){
-        event.preventDefault();
+    async function changePassword(){
         if(!validatePassword() && !validatePasswordChk()){
             return false;
         }
 
-        //TODO: 비밀번호 변경하기
+        const API_URL = `${API_BASE_URL}/users/profile/password`;
+        const newPasswordData = {
+            password: passwordInput.value.trim()
+        }
 
-        toastOn();
-        passwordInput.value = '';
-        passwordChkInput.value = '';
-        editBtn.style.backgroundColor = "#aca0eb";
+        try{
+            const response = await fetch(API_URL, {
+                method: "PATCH",
+                credentials: "include",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newPasswordData)
+            });
+            
+            const {message} = await response.json();
+
+            if(response.ok){
+                toastOn();
+            }else{
+                alert(message);
+            }
+
+            passwordInput.value = '';
+            passwordChkInput.value = '';
+            editBtn.style.backgroundColor = "#aca0eb";
+
+        }catch(error){
+
+        }
+        
     }
 
-
     // Helper Text
-    passwordInput.addEventListener("blur", updatePasswordHelperText);
-    passwordChkInput.addEventListener("blur", updatePasswordChkHelperText);
+    passwordInput.addEventListener("input", updatePasswordHelperText);
+    passwordChkInput.addEventListener("input", updatePasswordChkHelperText);
  
     // 비밀번호수정 버튼 활성화
     passwordInput.addEventListener("input", updateEditBtn);
