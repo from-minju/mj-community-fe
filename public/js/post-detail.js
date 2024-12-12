@@ -5,11 +5,11 @@ const API_URL = window.API_URL || 'http://localhost:3000';
 
 const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
 
-const editPostBtn = document.getElementById("editPostBtn");
-const editCommentBtn = document.getElementById("editCommentBtn");
+// const editPostBtn = document.getElementById("editPostBtn");
+// const editCommentBtn = document.getElementById("editCommentBtn");
 
-const deletePostBtn = document.getElementById("deletePostBtn");
-const deleteCommentBtn = document.getElementById("deleteCommentBtn");
+// const deletePostBtn = document.getElementById("deletePostBtn");
+// const deleteCommentBtn = document.getElementById("deleteCommentBtn");
 
 const postModalOverlay = document.getElementById("postModalOverlay");
 const commentModalOverlay = document.getElementById("commentModalOverlay");
@@ -125,8 +125,8 @@ function displayPost(post) {
 
     // 컨테이너 구성하기
     const postEditRemoveBtnContainer = document.querySelector(".postEditRemoveBtnContainer");
-    postEditRemoveBtnContainer.appendChild(editPostBtn);
-    postEditRemoveBtnContainer.appendChild(deletePostBtn);
+    postEditRemoveBtnContainer.innerHTML = "";
+    postEditRemoveBtnContainer.append(editPostBtn, deletePostBtn);
 
     // 이벤트 리스너
     editPostBtn.addEventListener("click", editPost);
@@ -341,7 +341,7 @@ async function createOrEditComment() {
     commentTextArea.value = "";
 
     await response.json();
-    fetchPost(); //TODO: 현재 사용자 정보 넘기기
+    fetchPost(); 
     fetchComments();
 
   } catch (error) {
