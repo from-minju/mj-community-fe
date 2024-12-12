@@ -110,7 +110,15 @@ hr {
     width: 100px;
     margin: 0px 10px;
     padding: 10px 0px;
-
+}
+#likesBtn {
+    border: none; /* 테두리 제거 */
+    font: inherit; /* 상속된 폰트 사용 */
+    color: inherit; /* 상속된 텍스트 색상 사용 */
+    cursor: pointer; /* 마우스 커서가 버튼 위에 있을 때 손 모양으로 변경 */
+}
+#likesBtn.liked{
+    background-color: #7f6aee;
 }
 
 .reactionData p {
@@ -187,3 +195,5 @@ hr {
     white-space: pre-wrap;
 }
 
+
+  

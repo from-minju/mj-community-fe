@@ -1,15 +1,9 @@
-import { API_BASE_URL, API_IMAGE_URL, DefaultProfileImageName } from "./config.js";
+import { API_BASE_URL, DefaultProfileImageName } from "./config.js";
 import { enableBtn, disableBtn, checkAuthAndRedirect, getFilePath, getCurrentUser } from "./utils.js";
 
 const API_URL = window.API_URL || 'http://localhost:3000';
 
 const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
-
-// const editPostBtn = document.getElementById("editPostBtn");
-// const editCommentBtn = document.getElementById("editCommentBtn");
-
-// const deletePostBtn = document.getElementById("deletePostBtn");
-// const deleteCommentBtn = document.getElementById("deleteCommentBtn");
 
 const postModalOverlay = document.getElementById("postModalOverlay");
 const commentModalOverlay = document.getElementById("commentModalOverlay");
@@ -22,6 +16,8 @@ const okCommentModalBtn = document.getElementById("okCommentModal");
 
 const commentTextArea = document.getElementById("writeCommentArea");
 const createOrEditCommentBtn = document.getElementById("writeCommentBtn");
+
+const likesBtn = document.getElementById("likesBtn");
 
 let currentUser = null;
 
@@ -143,7 +139,7 @@ function displayPost(post) {
   } else {
     document.querySelector(".postImageContainer").style.display = "none";
   }
-  document.getElementById("likesCnt").textContent = formatCnt(post.likes);
+  // document.getElementById("likesCnt").textContent = formatCnt(post.likes);
   document.getElementById("viewsCnt").textContent = formatCnt(post.views);
   document.getElementById("commentsCnt").textContent = formatCnt(post.comments);
 
@@ -232,6 +228,16 @@ function displayComments(comments) {
   });
 }
 
+function displayLikes (isLiked, likesCnt) {
+  document.getElementById("likesCnt").textContent = formatCnt(likesCnt);
+
+  if(isLiked){
+    likesBtn.classList.add('liked');
+  }else{
+    likesBtn.classList.remove('liked');
+  }
+}
+
 
 
 // 게시물 상세 내용 가져오기
@@ -289,6 +295,47 @@ async function fetchComments() {
       error
     );
   }
+}
+
+// 좋아요수 가져오기
+async function fetchLikes() {
+  const API_URL = `${API_BASE_URL}/posts/${postId}/likes`;
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "GET",
+      credentials: "include",
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) {
+      const { message } = await response.json();
+      throw new Error(
+        `Error ${response.status}: ${message || "Unknown error"}`
+      );
+    }
+
+    const { data: { isLiked, likesCnt } } = await response.json();
+    
+    displayLikes(isLiked, likesCnt);
+
+  } catch (error) {
+    console.error(
+      `[fetchLikes Error] 게시물 ${postId}에 대한 좋아요 데이터를 가져올 수 없습니다.`,
+      error
+    );
+  }
+}
+
+function updateLikesBtn() {
+  likesBtn.classList.toggle('liked');
+
+  if(likesBtn.classList.contains('liked')){
+    console.log("좋아요 눌림");
+  }else{
+    console.log("좋아요 취소");
+  }
+
 }
 
 function updateCreateCommentBtn() {
@@ -356,6 +403,7 @@ async function createOrEditComment() {
 
 commentTextArea.addEventListener("input", updateCreateCommentBtn);
 createOrEditCommentBtn.addEventListener("click", createOrEditComment);
+likesBtn.addEventListener("click", updateLikesBtn);
 
 window.addEventListener("click", function (event) {
   // 모달 바깥 클릭 시 닫기
@@ -376,4 +424,5 @@ document.addEventListener('DOMContentLoaded', async() => {
 
   fetchPost();
   fetchComments();
+  fetchLikes();
 });
