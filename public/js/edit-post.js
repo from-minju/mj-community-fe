@@ -81,6 +81,7 @@ async function fetchPostDetail() {
   try {
     const response = await fetch(`http://localhost:3000/posts/${postId}`, {
       method: "GET",
+      credentials: "include"
     });
 
     if (!response.ok) {
@@ -146,5 +147,5 @@ editPostBtn.addEventListener("click", editPost);
 
 document.addEventListener("DOMContentLoaded", async () => {
     checkAuthAndRedirect();
-    fetchPostDetail(); //TODO: 게시물 수정
+    fetchPostDetail();
 });

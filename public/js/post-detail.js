@@ -80,6 +80,7 @@ async function deleteComment(commentId) {
     }
 
     await response.json();
+    
   } catch (error) {
     console.error(error);
   }
@@ -102,6 +103,7 @@ function handleDeleteCommentBtn(commentId) {
   okCommentModalBtn.addEventListener("click", async () => {
     await deleteComment(commentId);
     commentModalOverlay.style.display = "none";
+    fetchPost();
     fetchComments();
   });
 }
@@ -366,10 +368,8 @@ async function updateLikesBtn() {
   likesBtn.classList.toggle('liked');
 
   if(likesBtn.classList.contains('liked')){
-    console.log("좋아요 눌림");
     await likePost();
   }else{
-    console.log("좋아요 취소");
     await dislikePost();
   }
   fetchLikes();
