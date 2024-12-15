@@ -77,9 +77,9 @@ document.addEventListener("click", function (event) {
 });
 
 // 이전 페이지
-document.getElementById("headerLeft").addEventListener("click", function () {
-  history.back();
-});
+// document.getElementById("headerLeft").addEventListener("click", function () {
+//   history.back();
+// });
 
   
 loginDropdown.addEventListener("click", () => {
