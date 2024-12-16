@@ -97,6 +97,7 @@ article {
     height: 36px;
     position: relative; /* 기준이 될 부모 요소 */
     width: 36px;
+    object-fit: cover;
 }
 
 .dropdown {
