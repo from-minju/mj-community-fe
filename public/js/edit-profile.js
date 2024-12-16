@@ -169,6 +169,39 @@ document.addEventListener("DOMContentLoaded", function(){
     /**
      * 모달창
      */
+    async function deleteAccount() {
+        const API_URL = `${API_BASE_URL}/users`;
+
+        try{
+            // 회원탈퇴 (회원의 모든 정보 삭제)
+            const response = await fetch(API_URL, {
+                method: "DELETE",
+                credentials: "include"
+            });
+
+            if(!response.ok){
+                return alert("회원탈퇴 실패");
+            }
+
+            // // 로그아웃 //TODO: 로그아웃(백엔드세션삭제)까지 백엔드에서 처리해야할지 정해야함.
+            // const API_URL = `http://localhost:3000/auth/logout`
+            // const logoutResponse = await fetch(API_URL, {
+            //     method: 'POST',
+            //     credentials: 'include',
+            // })
+
+            // if(!logoutResponse.ok){
+            //     return alert("로그아웃 실패");
+            // }
+
+            window.location.href = '/auth/login';
+
+        }catch(error){
+            console.error(error);
+        }
+        
+    }
+
     deleteAccountBtn.addEventListener("click", function() {
         modalOverlay.style.display = "flex";
     });
@@ -177,9 +210,7 @@ document.addEventListener("DOMContentLoaded", function(){
         modalOverlay.style.display = "none";
     });
 
-    okModalBtn.addEventListener("click", function() {
-        window.location.href = '/auth/login';
-    });
+    okModalBtn.addEventListener("click", deleteAccount);
 
     // 모달 밖을 클릭하면 닫히도록 설정
     window.addEventListener("click", function(event) {
@@ -206,6 +237,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
     // 프로필 수정
     editBtn.addEventListener("click", editProfile);
+
+    //
 
 });
 
