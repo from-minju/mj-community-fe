@@ -46,7 +46,7 @@ export const checkAuthAndRedirect = async() => {
 
 export const logout = async() => {
     try{
-        const API_URL = `http://localhost:3000/auth/logout`
+        const API_URL = `${API_BASE_URL}/auth/logout`
         const response = await fetch(API_URL, {
             method: 'POST',
             credentials: 'include',

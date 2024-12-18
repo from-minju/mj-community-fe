@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const {data: data} = await response.json();
             const newPostId = data.postId;
 
-            window.location.href = `http://localhost:8000/posts/${newPostId}`; 
+            window.location.href = `/posts/${newPostId}`; 
 
         }catch(error){
             console.error('게시물 작성 실패');

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "./config.js";
 import { enableBtn, disableBtn } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -57,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     async function login(){
-        const API_URL = `http://localhost:3000/auth/login`;
+        const API_URL = `${API_BASE_URL}/auth/login`;
         const loginData = {
             email: emailInput.value.trim(),
             password: passwordInput.value.trim()
@@ -75,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
             if(response.ok){
                 // alert(message);
-                window.location.href = `http://localhost:8000/posts`; 
+                window.location.href = `/posts`; 
             }else if (response.status === 401){
                 alert(message);
             }else{

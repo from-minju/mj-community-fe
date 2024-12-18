@@ -1,8 +1,6 @@
 import { API_BASE_URL, DefaultProfileImageName } from "./config.js";
 import { enableBtn, disableBtn, checkAuthAndRedirect, getFilePath, getCurrentUser } from "./utils.js";
 
-const API_URL = window.API_URL || 'http://localhost:3000';
-
 const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
 
 const postModalOverlay = document.getElementById("postModalOverlay");
@@ -44,7 +42,7 @@ function deletePost() {
 
   okPostModalBtn.addEventListener("click", async() => {
     try {
-      const API_URL = `http://localhost:3000/posts/${postId}`;
+      const API_URL = `${API_BASE_URL}/posts/${postId}`;
       const response = await fetch(API_URL, {
         method: "DELETE",
       });
@@ -67,7 +65,7 @@ function deletePost() {
 
 async function deleteComment(commentId) {
   try {
-    const API_URL = `http://localhost:3000/posts/${postId}/comments/${commentId}`;
+    const API_URL = `${API_BASE_URL}/posts/${postId}/comments/${commentId}`;
     const response = await fetch(API_URL, {
       method: "DELETE",
     });
@@ -132,12 +130,12 @@ function displayPost(post) {
   }
 
   document.querySelector(".postTitle").textContent = post.title;
-  document.getElementById("postWriterProfileImage").src = `${API_URL}/uploads/${post.profileImage}`;
+  document.getElementById("postWriterProfileImage").src = `${API_BASE_URL}/uploads/${post.profileImage}`;
   document.getElementById("postWriterName").textContent = post.nickname;
   document.querySelector(".createdTime").textContent = post.createdAt;
   document.querySelector(".postContent").innerHTML = post.content;
   if (post.postImage) {
-    document.querySelector(".postImage").src = `${API_URL}/uploads/${post.postImage}`;
+    document.querySelector(".postImage").src = `${API_BASE_URL}/uploads/${post.postImage}`;
   } else {
     document.querySelector(".postImageContainer").style.display = "none";
   }
@@ -246,7 +244,7 @@ function displayLikes (isLiked, likesCnt) {
 async function fetchPost() {
 
   try {
-    const response = await fetch(`${API_URL}/posts/${postId}`, {
+    const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
       method: "GET",
       credentials: "include"
     });

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "./config.js";
 import { checkAuthAndRedirect } from "./utils.js";
 
 const postId = window.location.pathname.split("/")[2];
@@ -79,7 +80,7 @@ function displayPostDetail(post) {
 async function fetchPostDetail() {
   // TODO: 인증
   try {
-    const response = await fetch(`http://localhost:3000/posts/${postId}`, {
+    const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
       method: "GET",
       credentials: "include"
     });
@@ -102,7 +103,7 @@ async function fetchPostDetail() {
 }
 
 async function editPost() {
-  const API_URL = `http://localhost:3000/posts/${postId}`;
+  const API_URL = `${API_BASE_URL}/posts/${postId}`;
   const postData = new FormData();
   postData.append("title", titleInput.value.trim());
   postData.append("content", contentInput.value.trim());

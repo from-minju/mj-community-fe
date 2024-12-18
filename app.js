@@ -1,14 +1,13 @@
 import express from 'express';
-import dotenv from 'dotenv';
-dotenv.config();
 
 // ESM 방식에서 __dirname을 얻는 방법
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { PORT, HOST } from './public/js/config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const port = process.env.PORT || 8000;
+
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -53,6 +52,6 @@ app.get('/posts/:postId/edit', (req, res) => {
 
 
 // 서버 시작
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running at http://${HOST}:${PORT}`);
 });

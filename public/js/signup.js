@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
    * 중복 검사
    */
     async function isEmailDuplicates() {
-      const API_URL = `http://localhost:3000/users/check-email`;
+      const API_URL = `${API_BASE_URL}/users/check-email`;
       const checkEmailData = {
         email: emailInput.value.trim()
       };
@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const API_URL = `http://localhost:3000/auth/signup`;
+    const API_URL = `${API_BASE_URL}/auth/signup`;
     const signupData = new FormData();
     signupData.append('email', emailInput.value.trim());
     signupData.append('password', passwordInput.value.trim());
@@ -268,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const {message} = await response.json();
       if(response.ok){
         alert(message);
-        window.location.href = `http://localhost:8000/auth/login`; 
+        window.location.href = `/auth/login`; 
       }else{
         alert(message);
       }
