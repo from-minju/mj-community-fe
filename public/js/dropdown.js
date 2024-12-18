@@ -43,7 +43,7 @@ export const fetchUserProfileDropdown = async() => {
             const { data } = await response.json();
             userProfileImage.src = data.profileImage
               ? `${API_BASE_URL}/uploads/${data.profileImage}`
-              : `${API_BASE_URL}/uploads/default-user-profile.png`;
+              : `${API_BASE_URL}/uploads/${DefaultProfileImageName}`;
             showLoginStatusBtn();
         }else{
             //로그인하지 않은 사용자임.
