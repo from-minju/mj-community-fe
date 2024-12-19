@@ -1,4 +1,4 @@
-import { API_BASE_URL, DefaultProfileImageName } from "./config.js";
+import { API_BASE_URL, API_IMAGE_URL, DefaultProfileImageName } from "./config.js";
 import { enableBtn, disableBtn, checkAuthAndRedirect, getFilePath, getCurrentUser } from "./utils.js";
 
 const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
@@ -130,19 +130,24 @@ function displayPost(post) {
   }
 
   document.querySelector(".postTitle").textContent = post.title;
-  document.getElementById("postWriterProfileImage").src = `${API_BASE_URL}/uploads/${post.profileImage}`;
+  document.getElementById("postWriterProfileImage").src = `${API_IMAGE_URL}/${post.profileImage}`;
   document.getElementById("postWriterName").textContent = post.nickname;
   document.querySelector(".createdTime").textContent = post.createdAt;
   document.querySelector(".postContent").innerHTML = post.content;
   if (post.postImage) {
-    document.querySelector(".postImage").src = `${API_BASE_URL}/uploads/${post.postImage}`;
+    document.querySelector(".postImage").src = `${API_IMAGE_URL}/${post.postImage}`;
   } else {
     document.querySelector(".postImageContainer").style.display = "none";
   }
-  // document.getElementById("likesCnt").textContent = formatCnt(post.likes);
+  document.getElementById("likesCnt").textContent = formatCnt(post.likes);
   document.getElementById("viewsCnt").textContent = formatCnt(post.views);
   document.getElementById("commentsCnt").textContent = formatCnt(post.comments);
 
+  if(post.isLiked){
+    likesBtn.classList.add('liked');
+  }else{
+    likesBtn.classList.remove('liked');
+  }
 
 }
 
@@ -228,17 +233,6 @@ function displayComments(comments) {
   });
 }
 
-function displayLikes (isLiked, likesCnt) {
-  document.getElementById("likesCnt").textContent = formatCnt(likesCnt);
-
-  if(isLiked){
-    likesBtn.classList.add('liked');
-  }else{
-    likesBtn.classList.remove('liked');
-  }
-}
-
-
 
 // 게시물 상세 내용 가져오기
 async function fetchPost() {
@@ -294,83 +288,29 @@ async function fetchComments() {
   }
 }
 
-// 좋아요수 가져오기
-async function fetchLikes() {
-  const API_URL = `${API_BASE_URL}/posts/${postId}/likes`;
-
-  try {
-    const response = await fetch(API_URL, {
-      method: "GET",
-      credentials: "include",
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (!response.ok) {
-      const { message } = await response.json();
-      throw new Error(
-        `Error ${response.status}: ${message || "Unknown error"}`
-      );
-    }
-
-    const { data: { isLiked, likesCnt } } = await response.json();
-    
-    displayLikes(isLiked, likesCnt);
-
-  } catch (error) {
-    console.error(
-      `[fetchLikes Error] 게시물 ${postId}에 대한 좋아요 데이터를 가져올 수 없습니다.`,
-      error
-    );
-  }
-}
-
-async function likePost(){
-  const API_URL = `${API_BASE_URL}/posts/${postId}/likes`;
-  try{
-    const response = await fetch(API_URL, {
-      method: "POST",
-      credentials: "include"
-    });
-
-    if(!response.status){
-      const { message } = await response.json();
-      alert(message);
-    }
-
-  }catch(error){
-    console.error(`[likePost Error] 게시물 ${postId}에 대해 좋아요를 누를 수 없습니다.`, error);
-
-  }
-}
-
-async function dislikePost(){
-  const API_URL = `${API_BASE_URL}/posts/${postId}/likes`;
-  try{
-    const response = await fetch(API_URL, {
-      method: "DELETE",
-      credentials: "include"
-    });
-
-    if(!response.status){
-      const { message } = await response.json();
-      alert(message);
-    }
-
-  }catch(error){
-    console.error(`[dislikePost Error] 게시물 ${postId}에 대해 좋아요를 취소할 수 없습니다.`, error);
-  }
-
-}
 
 async function updateLikesBtn() {
-  likesBtn.classList.toggle('liked');
+  const isLiked = likesBtn.classList.contains('liked');
 
-  if(likesBtn.classList.contains('liked')){
-    await likePost();
-  }else{
-    await dislikePost();
+  try{
+    const response = await fetch(`${API_BASE_URL}/posts/${postId}/likes`, {
+      method: isLiked ? 'DELETE' : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
+    });
+
+    if (!response.ok){
+      const { message } = await response.json();
+      return alert(message);
+    }
+
+    const { data } = await response.json();
+    document.getElementById("likesCnt").textContent = formatCnt(data.likesCnt);
+    likesBtn.classList.toggle('liked'); // 만약 버튼에 liked 클래스가 없다면 추가하고, 있으면 제거
+
+  } catch(error){
+    console.error(`[updateLikes Error] 게시물 ${postId}에 대해 좋아요를 처리할 수 없습니다.`, error);
   }
-  fetchLikes();
 }
 
 function updateCreateCommentBtn() {
@@ -459,5 +399,4 @@ document.addEventListener('DOMContentLoaded', async() => {
 
   fetchPost();
   fetchComments();
-  fetchLikes();
 });
