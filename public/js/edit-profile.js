@@ -183,17 +183,6 @@ document.addEventListener("DOMContentLoaded", function(){
                 return alert("회원탈퇴 실패");
             }
 
-            // // 로그아웃 //TODO: 로그아웃(백엔드세션삭제)까지 백엔드에서 처리해야할지 정해야함.
-            // const API_URL = `http://localhost:3000/auth/logout`
-            // const logoutResponse = await fetch(API_URL, {
-            //     method: 'POST',
-            //     credentials: 'include',
-            // })
-
-            // if(!logoutResponse.ok){
-            //     return alert("로그아웃 실패");
-            // }
-
             window.location.href = '/auth/login';
 
         }catch(error){
@@ -236,9 +225,7 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
     // 프로필 수정
-    editBtn.addEventListener("click", editProfile);
-
-    //
+    editBtn.addEventListener("click", editProfile);    
 
 });
 
