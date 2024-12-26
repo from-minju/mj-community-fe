@@ -26,6 +26,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const checkEmailData = {
         email: emailInput.value.trim()
       };
+
+      if (!emailInput.value.trim()){ return; }
   
       try{
         const response = await fetch(API_URL, {
@@ -47,6 +49,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const checkNicknameData = {
         nickname: nicknameInput.value.trim()
       };
+
+      if (!nicknameInput.value.trim()){ return; }
   
       try{
         const response = await fetch(API_URL, {
@@ -280,9 +284,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // Helper Text
-  emailInput.addEventListener("blur", updateEmailHelperText);
-  passwordInput.addEventListener("blur", updatePasswordHelperText);
-  passwordChkInput.addEventListener("blur", updatePasswordChkHelperText);
+  emailInput.addEventListener("input", updateEmailHelperText);
+  passwordInput.addEventListener("input", updatePasswordHelperText);
+  passwordChkInput.addEventListener("input", updatePasswordChkHelperText);
   nicknameInput.addEventListener("input", updateNicknameHelperText);
   profileImageInput.addEventListener("change", updateProfileImageHelperText);
 
