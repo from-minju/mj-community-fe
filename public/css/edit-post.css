@@ -74,3 +74,14 @@ hr {
     display: block;
     font-size: 14px;
 }
+
+.imageContainer {
+    display: flex;
+    align-items: center;
+}
+
+#deleteImageBtn {
+    padding: 3px 5px;
+    margin-left: 5px;
+    font-size: 10px;
+}

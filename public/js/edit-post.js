@@ -11,9 +11,15 @@ const titleHelperText = document.getElementById("titleHelperText");
 const contentHelperText = document.getElementById("contentHelperText");
 const imageNameHelperText = document.getElementById("imageName");
 
+const imageContainer = document.getElementById("imageContainer");
+const deleteImageBtn = document.getElementById("deleteImageBtn");
+
 const editPostBtn = document.getElementById("editPostBtn");
 
 const TITLE_MAX = 26;
+
+let isImageDeleted = false;  // 이미지 삭제 여부 플래그
+let isOriginalImageDeleted = false;
 
 function validateTitle() {
   if (titleInput.value.trim().length > TITLE_MAX) {
@@ -43,9 +49,15 @@ function updateContentHelperText() {
 
 function updateImageNameHelperText() {
   if (postImageInput.files.length > 0) {
-    imageNameHelperText.style.display = "none";
+    imageContainer.style.display = "none";
+    isImageDeleted = true;
+    
   } else {
-    imageNameHelperText.style.display = "block";
+    if(isOriginalImageDeleted){
+      return;
+    }
+    imageContainer.style.display = "flex";
+    isImageDeleted = false;
   }
 }
 
@@ -67,13 +79,15 @@ function updateEditPostBtn() {
 function displayPostDetail(post) {
   titleInput.value = post.title;
   contentInput.value = post.content;
-  // TODO: 기존에 저장되어있는 이미지 파일명 띄우기
+
   if (post.postImage) {
     const fullFileName = post.postImage;
     const fileName = fullFileName.split("-").slice(2).join("-");
 
+    imageContainer.style.display = "flex";
     document.getElementById("imageName").textContent = fileName;
   } else {
+    imageContainer.style.display = "none";
   }
 }
 
@@ -102,11 +116,18 @@ async function fetchPostDetail() {
   }
 }
 
+function deleteImage() {
+  imageContainer.style.display = "none";
+  isImageDeleted = true;
+  isOriginalImageDeleted = true;
+}
+
 async function editPost() {
   const API_URL = `${API_BASE_URL}/posts/${postId}`;
   const postData = new FormData();
   postData.append("title", titleInput.value.trim());
   postData.append("content", contentInput.value.trim());
+  postData.append("isImageDeleted", isImageDeleted);
 
   if (postImageInput.files[0]) {
     postData.append("postImage", postImageInput.files[0]);
@@ -142,6 +163,8 @@ titleInput.addEventListener("input", updateEditPostBtn);
 contentInput.addEventListener("input", updateEditPostBtn);
 
 postImageInput.addEventListener("change", updateImageNameHelperText);
+
+deleteImageBtn.addEventListener("click", deleteImage);
 
 editPostBtn.addEventListener("click", editPost);
 
