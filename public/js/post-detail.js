@@ -27,6 +27,13 @@ function formatCnt(cnt) {
   return `${cnt}`;
 }
 
+function initCreateCommentBtn() {
+  disableBtn(createOrEditCommentBtn);
+
+  createOrEditCommentBtn.textContent = "댓글 등록";
+  commentTextArea.value = "";
+}
+
 // 게시물 수정
 function editPost() {
   window.location.href = `/posts/${postId}/edit`;
@@ -78,6 +85,8 @@ async function deleteComment(commentId) {
     }
 
     await response.json();
+
+    initCreateCommentBtn();
     
   } catch (error) {
     console.error(error);
@@ -357,10 +366,12 @@ async function createOrEditComment() {
 
     editingCommentId = false;
 
-    disableBtn(createOrEditCommentBtn);
+    initCreateCommentBtn();
 
-    createOrEditCommentBtn.textContent = "댓글 등록";
-    commentTextArea.value = "";
+    // disableBtn(createOrEditCommentBtn);
+
+    // createOrEditCommentBtn.textContent = "댓글 등록";
+    // commentTextArea.value = "";
 
     await response.json();
     fetchPost(); 
