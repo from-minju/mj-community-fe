@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     function updateContentHelperText() {
-        if(titleInput.value.trim().length === 0){
+        if(contentInput.value.trim().length === 0){
             contentHelperText.textContent = "* 내용을 입력해 주세요.";
         }else {
             contentHelperText.textContent = "";
