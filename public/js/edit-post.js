@@ -51,13 +51,14 @@ function updateImageNameHelperText() {
   if (postImageInput.files.length > 0) {
     imageContainer.style.display = "none";
     isImageDeleted = true;
+    isOriginalImageDeleted = true;
     
   } else {
-    if(isOriginalImageDeleted){
+    isImageDeleted = false;
+    if(!isImageDeleted || isOriginalImageDeleted){
       return;
     }
     imageContainer.style.display = "flex";
-    isImageDeleted = false;
   }
 }
 
