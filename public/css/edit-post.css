@@ -46,6 +46,7 @@ hr {
     font-size: 15px;
     border: none;
     white-space: pre-wrap; /* 줄바꿈 문자 그대로 반영 */
+    word-break: break-all;
 }
 
 .helperText {

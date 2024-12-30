@@ -39,6 +39,7 @@ hr {
     height: 276px;
     font-size: 15px;
     border: none;
+    word-break: break-all;
 }
 
 .helperText {
