@@ -130,7 +130,7 @@ function displayPost(post) {
 
     // 컨테이너 구성하기
     const postEditRemoveBtnContainer = document.querySelector(".postEditRemoveBtnContainer");
-    postEditRemoveBtnContainer.innerHTML = "";
+    postEditRemoveBtnContainer.textContent = "";
     postEditRemoveBtnContainer.append(editPostBtn, deletePostBtn);
 
     // 이벤트 리스너
@@ -142,7 +142,7 @@ function displayPost(post) {
   document.getElementById("postWriterProfileImage").src = `${API_IMAGE_URL}/${post.profileImage}`;
   document.getElementById("postWriterName").textContent = post.nickname;
   document.querySelector(".createdTime").textContent = post.createdAt;
-  document.querySelector(".postContent").innerHTML = post.content;
+  document.querySelector(".postContent").textContent = post.content;
   if (post.postImage) {
     document.querySelector(".postImage").src = `${API_IMAGE_URL}/${post.postImage}`;
   } else {
@@ -162,7 +162,7 @@ function displayPost(post) {
 
 function displayComments(comments) {
   const commentsContainer = document.querySelector(".commentsContainer");
-  commentsContainer.innerHTML = "";
+  commentsContainer.textContent = "";
 
   if (!comments) return;
 
@@ -201,7 +201,7 @@ function displayComments(comments) {
     userProfile.src = getFilePath(comment.profileImage) || getFilePath(DefaultProfileImageName);
     writerName.textContent = comment.nickname;
     createdTime.textContent = comment.createdAt;
-    commentContent.innerHTML = comment.content;
+    commentContent.textContent = comment.content;
 
 
     writerArea.append(userProfile, writerName);
