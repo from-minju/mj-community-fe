@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./config.js";
+import { API_BASE_URL, API_IMAGE_URL } from "./config.js";
 import { fetchUserProfileDropdown } from "./dropdown.js";
 import { checkAuthAndRedirect, disableBtn, enableBtn, getCurrentUser } from "./utils.js";
 
@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
         email.textContent = user.email;
         nicknameInput.value = user.nickname;
-        profileImagePreview.src = `${API_BASE_URL}/uploads/${user.profileImage}`;
+        profileImagePreview.src = `${API_IMAGE_URL}/${user.profileImage}`;
     }
 
     /**
