@@ -1,6 +1,8 @@
 import { API_BASE_URL } from "./config.js";
 import { checkAuthAndRedirect } from "./utils.js";
 
+checkAuthAndRedirect();
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const titleInput = document.getElementById("titleInput");
@@ -86,7 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
 
-    checkAuthAndRedirect();
 
 
     titleInput.addEventListener("input", updateTitleHelperText);

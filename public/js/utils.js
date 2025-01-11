@@ -11,6 +11,10 @@ export const disableBtn = (button) => {
   button.style.backgroundColor = "#aca0eb";
 }
 
+export const getFilePath = (fileName) => {
+    return `${API_IMAGE_URL}/${fileName}`;
+}
+
 export const getCurrentUser = async() => {
     try {
         const API_URL = `${API_BASE_URL}/auth/check`
@@ -37,12 +41,10 @@ export const checkAuthAndRedirect = async() => {
     if(user){
         return user;
     }else{
-        alert("로그인이 필요합니다.");
         window.location.href = '/auth/login';
         return;
     }
 }
-
 
 export const logout = async() => {
     try{
@@ -63,7 +65,3 @@ export const logout = async() => {
         console.error(error);
     }
 }
-
-export const getFilePath = (fileName) => {
-    return `${API_IMAGE_URL}/${fileName}`;
-  }

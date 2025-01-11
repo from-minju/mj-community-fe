@@ -21,6 +21,8 @@ const TITLE_MAX = 26;
 let isImageDeleted = false;  // 이미지 삭제 여부 플래그
 let isOriginalImageDeleted = false;
 
+checkAuthAndRedirect();
+
 function validateTitle() {
   if (titleInput.value.trim().length > TITLE_MAX) {
     return false;
@@ -171,6 +173,5 @@ editPostBtn.addEventListener("click", editPost);
 
 
 document.addEventListener("DOMContentLoaded", async () => {
-    checkAuthAndRedirect();
     fetchPostDetail();
 });

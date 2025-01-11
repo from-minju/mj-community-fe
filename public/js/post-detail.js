@@ -18,9 +18,8 @@ const createOrEditCommentBtn = document.getElementById("writeCommentBtn");
 const likesBtn = document.getElementById("likesBtn");
 
 let currentUser = null;
-
-
 let editingCommentId = false;
+
 
 function formatCnt(cnt) {
   if (cnt >= 1000) return `${Math.floor(cnt / 1000)}k`;
@@ -401,12 +400,7 @@ window.addEventListener("click", function (event) {
 });
 
 document.addEventListener('DOMContentLoaded', async() => {
-  currentUser = await getCurrentUser();
-
-  if(!currentUser){
-    alert("로그인이 필요합니다.");
-    window.location.href = '/auth/login';
-  }
+  currentUser = await checkAuthAndRedirect();
 
   fetchPost();
   fetchComments();

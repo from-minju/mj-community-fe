@@ -1,4 +1,7 @@
 import { API_BASE_URL } from "./config.js";
+import { checkAuthAndRedirect } from "./utils.js";
+
+checkAuthAndRedirect();
 
 document.addEventListener("DOMContentLoaded", function(){
     const passwordInput = document.getElementById("password");
