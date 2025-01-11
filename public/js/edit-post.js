@@ -95,7 +95,6 @@ function displayPostDetail(post) {
 }
 
 async function fetchPostDetail() {
-  // TODO: 인증
   try {
     const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
       method: "GET",
@@ -139,6 +138,7 @@ async function editPost() {
   try {
     const response = await fetch(API_URL, {
       method: "PUT",
+      credentials: "include",
       body: postData,
     });
 

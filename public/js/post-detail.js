@@ -51,6 +51,7 @@ function deletePost() {
       const API_URL = `${API_BASE_URL}/posts/${postId}`;
       const response = await fetch(API_URL, {
         method: "DELETE",
+        credentials: "include"
       });
   
       if (response.ok) {
@@ -74,6 +75,7 @@ async function deleteComment(commentId) {
     const API_URL = `${API_BASE_URL}/posts/${postId}/comments/${commentId}`;
     const response = await fetch(API_URL, {
       method: "DELETE",
+      credentials: "include"
     });
 
     if (!response.ok) {
