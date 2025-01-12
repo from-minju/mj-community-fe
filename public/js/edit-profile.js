@@ -6,7 +6,6 @@ checkAuthAndRedirect();
 
 document.addEventListener("DOMContentLoaded", function(){
 
-    
     const deleteAccountBtn = document.getElementById("deleteAccountBtn");
     const closeModalBtn = document.getElementById("closeModal");
     const okModalBtn = document.getElementById("okModal");
@@ -57,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function(){
         if(nicknameValue && 
             nicknameValue.length <= 10 && 
             ! hasSpacesResult &&
-            ! isNicknameDuplicatesResult ){ //TODO: await문제같기도
+            ! isNicknameDuplicatesResult ){
             return true;
         }
         

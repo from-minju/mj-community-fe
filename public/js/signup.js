@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if(nicknameValue && 
         nicknameValue.length <= 10 && 
         ! hasSpacesResult &&
-        ! isNicknameDuplicatesResult ){ //TODO: await문제같기도
+        ! isNicknameDuplicatesResult ){ 
         return true;
     }
     
@@ -300,7 +300,5 @@ document.addEventListener("DOMContentLoaded", function () {
   profileImageInput.addEventListener("change", updateProfileImagePreview);
 
   signupBtn.addEventListener("click", signup);
-
-//TODO: 사진 
 
 });

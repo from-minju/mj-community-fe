@@ -56,7 +56,6 @@ function deletePost() {
   
       if (response.ok) {
         window.location.href = `/posts`;
-        alert("게시글이 삭제되었습니다.");
       }else{
         const { message } = await response.json();
         throw new Error(
