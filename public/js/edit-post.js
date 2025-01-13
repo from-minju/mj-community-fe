@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "./config.js";
-import { checkAuthAndRedirect } from "./utils.js";
+import { checkAuthAndRedirect, disableBtn, enableBtn } from "./utils.js";
 
 const postId = window.location.pathname.split("/")[2];
 
@@ -71,11 +71,10 @@ function updateEditPostBtn() {
     contentInput.value.trim() != "" &&
     validateTitle()
   ) {
-    editPostBtn.style.backgroundColor = "#7f6aee";
-    editPostBtn.disabled = false; //버튼 활성화
+    enableBtn(editPostBtn);
+    
   } else {
-    editPostBtn.style.backgroundColor = "#aca0eb";
-    editPostBtn.disabled = true; //버튼 비활성화
+    disableBtn(editPostBtn);
   }
 }
 

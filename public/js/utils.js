@@ -2,13 +2,13 @@ import { API_BASE_URL, API_IMAGE_URL } from "./config.js";
 
 export const enableBtn = (button) => {
   button.disabled = false;
-  button.style.backgroundColor = "#7f6aee";
+  button.style.backgroundColor = "#97D2FD";
   button.style.cursor = "pointer";
 }
 
 export const disableBtn = (button) => {
   button.disabled = true;
-  button.style.backgroundColor = "#aca0eb";
+  button.style.backgroundColor = "#8fc1e5ff";
 }
 
 export const getFilePath = (fileName) => {

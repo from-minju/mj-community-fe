@@ -1,11 +1,11 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Kirang+Haerang&display=swap');
 
 :root {
-    --maincolor: #aca0eb; 
-    --hovercolor: #7f6aee;
+    --maincolor: #97D2FD;
+    --hovercolor: #8fc1e5ff;
     --darkgray: #d9d9d9;
     --backcolor: #f4f5f7; 
-
+    --hovergray: #e9e9e9;
 }
 
 div {
@@ -21,10 +21,9 @@ body {
 }
 
 header {
-    height: 120px;
+    height: 110px;
     display: flex;
     justify-content: center;
-    border-bottom: 1px solid;
 }
 
 article {
@@ -46,9 +45,12 @@ article {
     padding: 32px 8px;
     width: 100%;
     text-align: center;
-    color: black;
-    font-size: 32px;
+    color: #000;
     text-decoration: none;
+    font-size: 37px;
+    font-weight: 500;
+    font-family: "Kirang Haerang", serif;
+    font-style: normal;
 }
 
 .header,
@@ -60,9 +62,9 @@ article {
 .header {
     border-radius: 20px;
     flex-direction: row;
-    height: 104px;
+    height: 100px;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 10px;
     width: 592px;
 }
 
@@ -74,8 +76,8 @@ article {
 .headerLeft {
     align-items: center;
     display: flex;
-    height: 36px;
-    width: 36px;
+    height: 30px;
+    width: 30px;
     margin-right: auto; /* 왼쪽으로 밀기 */
     cursor: pointer;
 }
@@ -106,6 +108,7 @@ article {
     background-color: var(--darkgray);
     width: 163px;
     right: 0; /* img의 오른쪽 끝에 드롭다운 배치 */
+    border-radius: 7px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* x축이동, y축이동, 흐림정도, 색상*/
 }
 
@@ -118,5 +121,8 @@ article {
 }
 
 .dropdownOption:hover {
-    background-color: #e9e9e9;
+    background-color: var(--hovergray);
+    font-size: 1.05em; /* 약간 확대 */
+    font-weight: 500;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
 }
