@@ -1,4 +1,4 @@
-import { API_BASE_URL, API_IMAGE_URL, DefaultProfileImageName } from "./config.js";
+import { API_BASE_URL, API_IMAGE_URL, DefaultProfileImageUrl } from "./config.js";
 import { logout } from "./utils.js";
 
 const loginDropdown = document.getElementById("loginDropdown");
@@ -43,11 +43,12 @@ export const fetchUserProfileDropdown = async() => {
             const { data } = await response.json();
             userProfileImage.src = data.profileImage
               ? `${API_IMAGE_URL}/${data.profileImage}`
-              : `${API_IMAGE_URL}/${DefaultProfileImageName}`;
+              : DefaultProfileImageUrl;
+            console.log(data.profileImage);
             showLoginStatusBtn();
         }else{
             //로그인하지 않은 사용자임.
-            userProfileImage.src = `${API_IMAGE_URL}/${DefaultProfileImageName}`;
+            userProfileImage.src = DefaultProfileImageUrl;
             showLogoutStatusBtn();
         }
 

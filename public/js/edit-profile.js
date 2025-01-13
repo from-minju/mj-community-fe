@@ -164,7 +164,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
         email.textContent = user.email;
         nicknameInput.value = user.nickname;
-        profileImagePreview.src = `${API_IMAGE_URL}/${user.profileImage}`;
+        if(user.profileImage){
+            profileImagePreview.src = `${API_IMAGE_URL}/${user.profileImage}`;
+        }
     }
 
     /**

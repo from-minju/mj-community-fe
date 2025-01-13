@@ -1,4 +1,4 @@
-import { API_BASE_URL, API_IMAGE_URL, DefaultProfileImageName } from "./config.js";
+import { API_BASE_URL, API_IMAGE_URL, DefaultProfileImageUrl } from "./config.js";
 import { enableBtn, disableBtn, checkAuthAndRedirect, getFilePath, getCurrentUser } from "./utils.js";
 
 const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
@@ -139,7 +139,7 @@ function displayPost(post) {
   }
 
   document.querySelector(".postTitle").textContent = post.title;
-  document.getElementById("postWriterProfileImage").src = `${API_IMAGE_URL}/${post.profileImage}`;
+  document.getElementById("postWriterProfileImage").src = post.profileImage ? `${API_IMAGE_URL}/${post.profileImage}` : DefaultProfileImageUrl;
   document.getElementById("postWriterName").textContent = post.nickname;
   document.querySelector(".createdTime").textContent = post.createdAt;
   document.querySelector(".postContent").textContent = post.content;
@@ -198,7 +198,7 @@ function displayComments(comments) {
 
 
     // 컨테이너 구성하기
-    userProfile.src = getFilePath(comment.profileImage) || getFilePath(DefaultProfileImageName);
+    userProfile.src = comment.profileImage ? getFilePath(comment.profileImage) : DefaultProfileImageUrl;
     writerName.textContent = comment.nickname;
     createdTime.textContent = comment.createdAt;
     commentContent.textContent = comment.content;

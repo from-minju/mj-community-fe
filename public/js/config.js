@@ -7,4 +7,4 @@ export const API_BASE_URL = `http://${HOST}:${BE_PORT}/api`;
 
 export const API_IMAGE_URL = `http://${HOST}:${BE_PORT}/uploads`
 
-export const DefaultProfileImageName = "default/default-user-profile.png"
+export const DefaultProfileImageUrl = "/images/default-profile-image.png"

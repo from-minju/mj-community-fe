@@ -60,7 +60,6 @@ export const logout = async() => {
         }
 
         const {message} = await response.json();
-        alert(message);
     }catch(error){
         console.error(error);
     }

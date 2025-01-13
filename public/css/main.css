@@ -122,6 +122,7 @@ article {
 
 .dropdownOption:hover {
     background-color: var(--hovergray);
+    color: var(--hovercolor);
     font-size: 1.05em; /* 약간 확대 */
     font-weight: 500;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 추가 */

@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "./config.js";
-import { checkAuthAndRedirect } from "./utils.js";
+import { checkAuthAndRedirect, disableBtn, enableBtn } from "./utils.js";
 
 checkAuthAndRedirect();
 
@@ -46,11 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateCreatePostBtn() {
         if(titleInput.value.trim() != "" && contentInput.value.trim() != "" && validateTitle()){
-            createPostBtn.style.backgroundColor = "#7f6aee";
-            createPostBtn.disabled = false; //버튼 활성화
+            enableBtn(createPostBtn);
         } else{
-            createPostBtn.style.backgroundColor = "#aca0eb";
-            createPostBtn.disabled = true; //버튼 비활성화 
+            disableBtn(createPostBtn);
         }
     };
 
