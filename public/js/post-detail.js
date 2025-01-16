@@ -1,5 +1,6 @@
 import { API_BASE_URL, API_IMAGE_URL, DefaultProfileImageUrl } from "./config.js";
 import { enableBtn, disableBtn, checkAuthAndRedirect, getFilePath, getCurrentUser } from "./utils.js";
+import { COMMENT_MAX, validateComment } from "./validation.js";
 
 const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
 
@@ -13,6 +14,7 @@ const okPostModalBtn = document.getElementById("okPostModal");
 const okCommentModalBtn = document.getElementById("okCommentModal");
 
 const commentTextArea = document.getElementById("writeCommentArea");
+const commentHelperText = document.getElementById("commentHelperText");
 const createOrEditCommentBtn = document.getElementById("writeCommentBtn");
 
 const likesBtn = document.getElementById("likesBtn");
@@ -31,6 +33,7 @@ function initCreateCommentBtn() {
 
   createOrEditCommentBtn.textContent = "댓글 등록";
   commentTextArea.value = "";
+  commentHelperText.style.display = "none";
 }
 
 // 게시물 수정
@@ -331,6 +334,25 @@ function updateCreateCommentBtn() {
   }
 }
 
+function updateCommentHelperText() {
+  // const commentTextArea = document.getElementById("writeCommentArea");
+  // const commentHelperText = document.getElementById("commentHelperText");
+  // const createOrEditCommentBtn = document.getElementById("writeCommentBtn");
+
+  const commentValue = commentTextArea.value.trim();
+
+  if(!validateComment(commentValue)){
+    commentHelperText.style.display = "flex";
+    commentHelperText.textContent = `* 댓글은 ${COMMENT_MAX}자를 넘을 수 없습니다.`;
+    disableBtn(createOrEditCommentBtn);
+  }else{
+    commentHelperText.style.display = "none";
+    commentHelperText.textContent = "";
+    enableBtn(createOrEditCommentBtn);
+  }
+
+}
+
 async function createOrEditComment() {
   if (!commentTextArea.value.trim()) return;
 
@@ -368,11 +390,6 @@ async function createOrEditComment() {
 
     initCreateCommentBtn();
 
-    // disableBtn(createOrEditCommentBtn);
-
-    // createOrEditCommentBtn.textContent = "댓글 등록";
-    // commentTextArea.value = "";
-
     await response.json();
     fetchPost(); 
     fetchComments();
@@ -384,10 +401,8 @@ async function createOrEditComment() {
 }
 
 
-
-
-
 commentTextArea.addEventListener("input", updateCreateCommentBtn);
+commentTextArea.addEventListener("input", updateCommentHelperText);
 createOrEditCommentBtn.addEventListener("click", createOrEditComment);
 likesBtn.addEventListener("click", updateLikesBtn);
 
