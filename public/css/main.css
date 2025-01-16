@@ -6,6 +6,9 @@
     --darkgray: #d9d9d9;
     --backcolor: #f4f5f7; 
     --hovergray: #e9e9e9;
+
+    --mainfont: "Kirang Haerang", Arial;
+    --secondfont:  Arial;
 }
 
 div {
@@ -49,8 +52,15 @@ article {
     text-decoration: none;
     font-size: 37px;
     font-weight: 500;
-    font-family: "Kirang Haerang", serif;
+    font-family: var(--mainfont);
     font-style: normal;
+}
+
+.headerText:hover {
+    transform: scale(1.1); /* 10% 확대 */
+    transform: translateY(-2px);             /* 약간 위로 이동 */
+    transition: all 0.3s ease; /* 부드러운 전환 */
+    color: var(--maincolor);
 }
 
 .header,

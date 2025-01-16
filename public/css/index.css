@@ -29,6 +29,7 @@ div {
     border: none;
     font-size: 16px;
     font-weight: 500;
+    font-family: var(--secondfont);
 }
 
 .createPostBtn:hover {
@@ -87,8 +88,8 @@ hr {
     align-items: center; 
     font-size: 15px;
     font-weight: 700;
-    padding-top: 10px;
-    padding-bottom: 13px;
+    padding-top: 5px;
+    padding-bottom: 7px;
 }
 
 .postWriterArea p {

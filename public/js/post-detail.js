@@ -335,10 +335,6 @@ function updateCreateCommentBtn() {
 }
 
 function updateCommentHelperText() {
-  // const commentTextArea = document.getElementById("writeCommentArea");
-  // const commentHelperText = document.getElementById("commentHelperText");
-  // const createOrEditCommentBtn = document.getElementById("writeCommentBtn");
-
   const commentValue = commentTextArea.value.trim();
 
   if(!validateComment(commentValue)){
