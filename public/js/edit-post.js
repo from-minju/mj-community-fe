@@ -94,9 +94,8 @@ async function fetchPostDetail() {
 
     if (!response.ok) {
       const { message } = await response.json();
-      throw new Error(
-        `Error ${response.status}: ${message || "Unknown error"}`
-      );
+      alert(message);
+      window.location.href = "/";
     }
 
     const { data: post } = await response.json();
