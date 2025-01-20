@@ -87,7 +87,7 @@ hr {
 }
 
 .postImage {
-    width: 95%;
+    width: 80%;
     background-color: var(--darkgray);
     border: none;
 }

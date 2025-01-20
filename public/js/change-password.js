@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "./config.js";
-import { checkAuthAndRedirect, disableBtn } from "./utils.js";
+import { checkAuthAndRedirect, disableBtn, enableBtn } from "./utils.js";
 
 checkAuthAndRedirect();
 
