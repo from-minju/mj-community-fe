@@ -1,5 +1,6 @@
-import { API_BASE_URL, API_IMAGE_URL, DefaultProfileImageName } from "./config.js";
+import { API_BASE_URL, API_IMAGE_URL, DefaultProfileImageUrl } from "./config.js";
 import { enableBtn, disableBtn, checkAuthAndRedirect, getFilePath, getCurrentUser } from "./utils.js";
+import { COMMENT_MAX, validateComment } from "./validation.js";
 
 const postId = window.location.pathname.split("/").pop(); //경로를 /로 나누고 배열의 맨 마지막 값(:postId)을 가져옴
 
@@ -13,14 +14,14 @@ const okPostModalBtn = document.getElementById("okPostModal");
 const okCommentModalBtn = document.getElementById("okCommentModal");
 
 const commentTextArea = document.getElementById("writeCommentArea");
+const commentHelperText = document.getElementById("commentHelperText");
 const createOrEditCommentBtn = document.getElementById("writeCommentBtn");
 
 const likesBtn = document.getElementById("likesBtn");
 
 let currentUser = null;
-
-
 let editingCommentId = false;
+
 
 function formatCnt(cnt) {
   if (cnt >= 1000) return `${Math.floor(cnt / 1000)}k`;
@@ -32,6 +33,7 @@ function initCreateCommentBtn() {
 
   createOrEditCommentBtn.textContent = "댓글 등록";
   commentTextArea.value = "";
+  commentHelperText.style.display = "none";
 }
 
 // 게시물 수정
@@ -52,13 +54,14 @@ function deletePost() {
       const API_URL = `${API_BASE_URL}/posts/${postId}`;
       const response = await fetch(API_URL, {
         method: "DELETE",
+        credentials: "include"
       });
   
       if (response.ok) {
         window.location.href = `/posts`;
-        alert("게시글이 삭제되었습니다.");
       }else{
         const { message } = await response.json();
+        alert(message);
         throw new Error(
           `Error ${response.status}: ${message || "Unknown error"}`
         );
@@ -75,6 +78,7 @@ async function deleteComment(commentId) {
     const API_URL = `${API_BASE_URL}/posts/${postId}/comments/${commentId}`;
     const response = await fetch(API_URL, {
       method: "DELETE",
+      credentials: "include"
     });
 
     if (!response.ok) {
@@ -139,7 +143,7 @@ function displayPost(post) {
   }
 
   document.querySelector(".postTitle").textContent = post.title;
-  document.getElementById("postWriterProfileImage").src = `${API_IMAGE_URL}/${post.profileImage}`;
+  document.getElementById("postWriterProfileImage").src = post.profileImage ? `${API_IMAGE_URL}/${post.profileImage}` : DefaultProfileImageUrl;
   document.getElementById("postWriterName").textContent = post.nickname;
   document.querySelector(".createdTime").textContent = post.createdAt;
   document.querySelector(".postContent").textContent = post.content;
@@ -198,7 +202,7 @@ function displayComments(comments) {
 
 
     // 컨테이너 구성하기
-    userProfile.src = getFilePath(comment.profileImage) || getFilePath(DefaultProfileImageName);
+    userProfile.src = comment.profileImage ? getFilePath(comment.profileImage) : DefaultProfileImageUrl;
     writerName.textContent = comment.nickname;
     createdTime.textContent = comment.createdAt;
     commentContent.textContent = comment.content;
@@ -254,9 +258,8 @@ async function fetchPost() {
 
     if (!response.ok) {
       const { message } = await response.json();
-      throw new Error(
-        `Error ${response.status}: ${message || "Unknown error"}`
-      );
+      alert(message);
+      window.location.href = "/";
     }
 
     const { data: post } = await response.json();
@@ -331,6 +334,21 @@ function updateCreateCommentBtn() {
   }
 }
 
+function updateCommentHelperText() {
+  const commentValue = commentTextArea.value.trim();
+
+  if(!validateComment(commentValue)){
+    commentHelperText.style.display = "flex";
+    commentHelperText.textContent = `* 댓글은 ${COMMENT_MAX}자를 넘을 수 없습니다.`;
+    disableBtn(createOrEditCommentBtn);
+  }else{
+    commentHelperText.style.display = "none";
+    commentHelperText.textContent = "";
+    enableBtn(createOrEditCommentBtn);
+  }
+
+}
+
 async function createOrEditComment() {
   if (!commentTextArea.value.trim()) return;
 
@@ -368,11 +386,6 @@ async function createOrEditComment() {
 
     initCreateCommentBtn();
 
-    // disableBtn(createOrEditCommentBtn);
-
-    // createOrEditCommentBtn.textContent = "댓글 등록";
-    // commentTextArea.value = "";
-
     await response.json();
     fetchPost(); 
     fetchComments();
@@ -384,10 +397,8 @@ async function createOrEditComment() {
 }
 
 
-
-
-
 commentTextArea.addEventListener("input", updateCreateCommentBtn);
+commentTextArea.addEventListener("input", updateCommentHelperText);
 createOrEditCommentBtn.addEventListener("click", createOrEditComment);
 likesBtn.addEventListener("click", updateLikesBtn);
 
@@ -401,12 +412,7 @@ window.addEventListener("click", function (event) {
 });
 
 document.addEventListener('DOMContentLoaded', async() => {
-  currentUser = await getCurrentUser();
-
-  if(!currentUser){
-    alert("로그인이 필요합니다.");
-    window.location.href = '/auth/login';
-  }
+  currentUser = await checkAuthAndRedirect();
 
   fetchPost();
   fetchComments();

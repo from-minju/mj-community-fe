@@ -1,12 +1,5 @@
-:root {
-    --maincolor: #aca0eb; 
-    --hovercolor: #7f6aee;
-    --lightgray: #f4f5f7; 
-    --darkgray: #d9d9d9;
-}
-
 .postContainer {
-    padding-top: 30px;    
+    padding-top: 15px;    
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -22,7 +15,7 @@ hr {
     display: flex;
     justify-content: space-between; /* 좌우 공간을 균등하게 배분, 좌측우측정렬 */
     align-items: center; /* 수직 중앙 정렬 */
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .metaLeftContainer {
@@ -52,7 +45,7 @@ hr {
 
 .userProfile {
     object-fit: cover;
-    background-color: #d9d9d9;
+    background-color: var(--darkgray);
     background-size: cover;
     border: none;
     border-radius: 50%;
@@ -79,6 +72,12 @@ hr {
     cursor: pointer;
 }
 
+.editRemoveBtn:hover {
+    background-color: var(--maincolor);
+    transform: translateY(-2px);             /* 약간 위로 이동 */
+    transition: all 0.3s ease; /* 부드러운 전환 */
+}
+
 .postImageContainer {
     width: 100%;
     display: flex;
@@ -88,7 +87,7 @@ hr {
 }
 
 .postImage {
-    width: 95%;
+    width: 80%;
     background-color: var(--darkgray);
     border: none;
 }
@@ -96,7 +95,7 @@ hr {
 .postContent {
     margin-bottom: 30px;
     white-space: pre-wrap; /* 줄바꿈 문자 그대로 반영 */
-    word-break: break-all;
+    overflow-wrap: break-word; /* 단어가 요소의 너비를 초과하면 단어 사이에서 줄을 바꿈, 단어를 최대한 보존하면서 텍스트를 줄바꿈*/
 }
 
 .reactionContainer {
@@ -108,7 +107,7 @@ hr {
 .reactionData {
     background-color: var(--darkgray);
     border-radius: 16px;
-    width: 100px;
+    width: 95px;
     margin: 0px 10px;
     padding: 10px 0px;
 }
@@ -119,7 +118,7 @@ hr {
     cursor: pointer; /* 마우스 커서가 버튼 위에 있을 때 손 모양으로 변경 */
 }
 #likesBtn.liked{
-    background-color: #7f6aee;
+    background-color: var(--maincolor);
 }
 
 .reactionData p {
@@ -131,11 +130,14 @@ hr {
 
 .reactionNum {
     font-weight: 700;
+    font-family: var(--secondfont);
 
 }
 
 .reactionName {
     font-weight: 700;
+    font-family: var(--secondfont);
+
 }
 
 .postBottomContainer {
@@ -147,23 +149,31 @@ hr {
 /*
  * *********** 댓글 *************
  */
+ .helperText {
+    color: red;
+    height: 20px;
+    font-size: 13px;
+    padding: 0px 15px;
+    display: none;
+}
+
 .writeCommentContainer {
     background-color: #FFFFFF;
     border-radius: 16px;
     width: 100%;
     display: flex;
     flex-direction: column;
-
 }
 
 .writeCommentArea {
-    margin: 15px;
+    margin: 10px 15px;
     height: 100px;
     text-align: left;
     width: calc(100% - 36px);
     border: none;
     font-size: 15px;
-    word-break: break-all;
+    overflow-wrap: break-word;
+
 }
 
 .writeCommentContainer hr {
@@ -195,7 +205,7 @@ hr {
     padding-left: 46px;
     font-size: 15px;
     white-space: pre-wrap;
-    word-break: break-all;
+    overflow-wrap: break-word;
 }
 
 

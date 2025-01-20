@@ -1,10 +1,11 @@
-import { API_BASE_URL } from "./config.js";
+import { API_BASE_URL, API_IMAGE_URL } from "./config.js";
 import { fetchUserProfileDropdown } from "./dropdown.js";
 import { checkAuthAndRedirect, disableBtn, enableBtn, getCurrentUser } from "./utils.js";
 
+checkAuthAndRedirect();
+
 document.addEventListener("DOMContentLoaded", function(){
 
-    
     const deleteAccountBtn = document.getElementById("deleteAccountBtn");
     const closeModalBtn = document.getElementById("closeModal");
     const okModalBtn = document.getElementById("okModal");
@@ -55,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function(){
         if(nicknameValue && 
             nicknameValue.length <= 10 && 
             ! hasSpacesResult &&
-            ! isNicknameDuplicatesResult ){ //TODO: await문제같기도
+            ! isNicknameDuplicatesResult ){
             return true;
         }
         
@@ -163,7 +164,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
         email.textContent = user.email;
         nicknameInput.value = user.nickname;
-        profileImagePreview.src = `${API_BASE_URL}/uploads/${user.profileImage}`;
+        if(user.profileImage){
+            profileImagePreview.src = `${API_IMAGE_URL}/${user.profileImage}`;
+        }
     }
 
     /**
@@ -209,7 +212,6 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
     
-    checkAuthAndRedirect();
     fetchUserInfo();
 
     //Helper Text

@@ -54,5 +54,5 @@
 }
 
 .optionB{
-    background-color: #c4a5fb;
+    background-color: var(--maincolor);
 }

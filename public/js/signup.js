@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if(nicknameValue && 
         nicknameValue.length <= 10 && 
         ! hasSpacesResult &&
-        ! isNicknameDuplicatesResult ){ //TODO: await문제같기도
+        ! isNicknameDuplicatesResult ){ 
         return true;
     }
     
@@ -219,6 +219,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 회원가입 버튼 활성화 
   async function updateSignupBtn (){
+    if(!emailInput.value.trim() || passwordInput.value.trim() || passwordChkInput.value.trim() || nicknameInput.value.trim()){
+      disableBtn(signupBtn);
+    }
+
     if(validateEmail() && validatePassword() && validatePasswordChk() && await validateNickname()){
       enableBtn(signupBtn);
     } else{
@@ -287,20 +291,18 @@ document.addEventListener("DOMContentLoaded", function () {
   emailInput.addEventListener("input", updateEmailHelperText);
   passwordInput.addEventListener("input", updatePasswordHelperText);
   passwordChkInput.addEventListener("input", updatePasswordChkHelperText);
-  nicknameInput.addEventListener("input", updateNicknameHelperText);
+  nicknameInput.addEventListener("blur", updateNicknameHelperText);
   profileImageInput.addEventListener("change", updateProfileImageHelperText);
 
   // 회원가입 버튼 활성화
   emailInput.addEventListener("input", updateSignupBtn);
   passwordInput.addEventListener("input", updateSignupBtn);
   passwordChkInput.addEventListener("input", updateSignupBtn);
-  nicknameInput.addEventListener("input", updateSignupBtn);
+  nicknameInput.addEventListener("blur", updateSignupBtn);
 
   profileImageInput.addEventListener("change", profileImage);
   profileImageInput.addEventListener("change", updateProfileImagePreview);
 
   signupBtn.addEventListener("click", signup);
-
-//TODO: 사진 
 
 });

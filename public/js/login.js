@@ -50,6 +50,10 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     function updateLoginBtn() {
+        if(!emailInput.value.trim() || !passwordInput.value.trim()){
+            disableBtn(loginBtn);
+            return;
+        }
         if(validateEmail() && validatePassword()){
             enableBtn(loginBtn);
         }else{

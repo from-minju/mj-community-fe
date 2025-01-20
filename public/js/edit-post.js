@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "./config.js";
-import { checkAuthAndRedirect } from "./utils.js";
+import { checkAuthAndRedirect, disableBtn, enableBtn } from "./utils.js";
+import { CONTENT_MAX, TITLE_MAX, validatePostContent, validateTitle } from "./validation.js";
 
 const postId = window.location.pathname.split("/")[2];
 
@@ -16,21 +17,13 @@ const deleteImageBtn = document.getElementById("deleteImageBtn");
 
 const editPostBtn = document.getElementById("editPostBtn");
 
-const TITLE_MAX = 26;
-
 let isImageDeleted = false;  // 이미지 삭제 여부 플래그
 let isOriginalImageDeleted = false;
 
-function validateTitle() {
-  if (titleInput.value.trim().length > TITLE_MAX) {
-    return false;
-  } else {
-    return true;
-  }
-}
+checkAuthAndRedirect();
 
 function updateTitleHelperText() {
-  if (!validateTitle()) {
+  if (!validateTitle(titleInput.value)) {
     titleHelperText.textContent = `* 제목은 ${TITLE_MAX}자를 초과할 수 없습니다.`;
   } else if (titleInput.value.trim().length === 0) {
     titleHelperText.textContent = "* 제목을 입력해 주세요.";
@@ -40,12 +33,14 @@ function updateTitleHelperText() {
 }
 
 function updateContentHelperText() {
-  if (contentInput.value.trim().length === 0) {
-    contentHelperText.textContent = "* 내용을 입력해 주세요.";
-  } else {
-    contentHelperText.textContent = "";
-  }
-}
+  if(!validatePostContent(contentInput.value)){
+      contentHelperText.textContent = `* 내용은 ${CONTENT_MAX}자를 초과할 수 없습니다.`;
+  }else if(contentInput.value.trim().length === 0){
+      contentHelperText.textContent = "* 내용을 입력해 주세요.";
+  }else {
+      contentHelperText.textContent = "";
+  };
+};
 
 function updateImageNameHelperText() {
   if (postImageInput.files.length > 0) {
@@ -65,15 +60,13 @@ function updateImageNameHelperText() {
 // 모두 입력했는지 확인, 글자 수 확인 후 버튼 활성화
 function updateEditPostBtn() {
   if (
-    titleInput.value.trim() != "" &&
-    contentInput.value.trim() != "" &&
-    validateTitle()
+    titleInput.value.trim().trim() != "" && contentInput.value.trim().trim() != "" &&
+    validateTitle(titleInput.value) && validatePostContent(contentInput.value)
   ) {
-    editPostBtn.style.backgroundColor = "#7f6aee";
-    editPostBtn.disabled = false; //버튼 활성화
+    enableBtn(editPostBtn);
+    
   } else {
-    editPostBtn.style.backgroundColor = "#aca0eb";
-    editPostBtn.disabled = true; //버튼 비활성화
+    disableBtn(editPostBtn);
   }
 }
 
@@ -93,7 +86,6 @@ function displayPostDetail(post) {
 }
 
 async function fetchPostDetail() {
-  // TODO: 인증
   try {
     const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
       method: "GET",
@@ -102,9 +94,8 @@ async function fetchPostDetail() {
 
     if (!response.ok) {
       const { message } = await response.json();
-      throw new Error(
-        `Error ${response.status}: ${message || "Unknown error"}`
-      );
+      alert(message);
+      window.location.href = "/";
     }
 
     const { data: post } = await response.json();
@@ -137,6 +128,7 @@ async function editPost() {
   try {
     const response = await fetch(API_URL, {
       method: "PUT",
+      credentials: "include",
       body: postData,
     });
 
@@ -171,6 +163,5 @@ editPostBtn.addEventListener("click", editPost);
 
 
 document.addEventListener("DOMContentLoaded", async () => {
-    checkAuthAndRedirect();
     fetchPostDetail();
 });

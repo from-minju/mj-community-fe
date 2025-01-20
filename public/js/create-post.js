@@ -1,5 +1,8 @@
 import { API_BASE_URL } from "./config.js";
-import { checkAuthAndRedirect } from "./utils.js";
+import { checkAuthAndRedirect, disableBtn, enableBtn } from "./utils.js";
+import { CONTENT_MAX, TITLE_MAX, validatePostContent, validateTitle } from "./validation.js";
+
+checkAuthAndRedirect();
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -12,19 +15,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const postImageInput = document.getElementById("postWriteImage");
     const createPostBtn = document.getElementById("createPostBtn");
 
-    const TITLE_MAX = 26;
 
-
-    function validateTitle() {
-        if(titleInput.value.trim().length > TITLE_MAX){
-            return false;
-        }else{
-            return true;
-        }
-    };
 
     function updateTitleHelperText() {
-        if(!validateTitle()){
+        if(!validateTitle(titleInput.value)){
             titleHelperText.textContent = `* 제목은 ${TITLE_MAX}자를 초과할 수 없습니다.`;
         }else if(titleInput.value.trim().length === 0){
             titleHelperText.textContent = "* 제목을 입력해 주세요.";
@@ -34,7 +28,9 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     function updateContentHelperText() {
-        if(contentInput.value.trim().length === 0){
+        if(!validatePostContent(contentInput.value)){
+            contentHelperText.textContent = `* 내용은 ${CONTENT_MAX}자를 초과할 수 없습니다.`;
+        }else if(contentInput.value.trim().length === 0){
             contentHelperText.textContent = "* 내용을 입력해 주세요.";
         }else {
             contentHelperText.textContent = "";
@@ -43,12 +39,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     function updateCreatePostBtn() {
-        if(titleInput.value.trim() != "" && contentInput.value.trim() != "" && validateTitle()){
-            createPostBtn.style.backgroundColor = "#7f6aee";
-            createPostBtn.disabled = false; //버튼 활성화
+        if(titleInput.value.trim() != "" && contentInput.value.trim() != "" 
+            && validateTitle(titleInput.value) && validatePostContent(contentInput.value)){
+            enableBtn(createPostBtn);
         } else{
-            createPostBtn.style.backgroundColor = "#aca0eb";
-            createPostBtn.disabled = true; //버튼 비활성화 
+            disableBtn(createPostBtn);
         }
     };
 
@@ -86,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
 
-    checkAuthAndRedirect();
 
 
     titleInput.addEventListener("input", updateTitleHelperText);

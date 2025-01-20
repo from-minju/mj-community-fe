@@ -1,4 +1,7 @@
 import { API_BASE_URL } from "./config.js";
+import { checkAuthAndRedirect, disableBtn, enableBtn } from "./utils.js";
+
+checkAuthAndRedirect();
 
 document.addEventListener("DOMContentLoaded", function(){
     const passwordInput = document.getElementById("password");
@@ -65,12 +68,10 @@ document.addEventListener("DOMContentLoaded", function(){
     // 비밀번호변경 버튼 활성화
     function updateEditBtn() {
         if(validatePassword() && validatePasswordChk()){
-            editBtn.disabled = false;
-            editBtn.style.backgroundColor = "#7f6aee";
+            enableBtn(editBtn);
 
         }else{
-            editBtn.disabled = true;
-            editBtn.style.backgroundColor = "#aca0eb";
+            disableBtn(editBtn);
         }
     }
 
@@ -111,8 +112,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
             passwordInput.value = '';
             passwordChkInput.value = '';
-            editBtn.style.backgroundColor = "#aca0eb";
-
+            disableBtn(editBtn);
         }catch(error){
 
         }

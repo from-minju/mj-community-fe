@@ -2,13 +2,17 @@ import { API_BASE_URL, API_IMAGE_URL } from "./config.js";
 
 export const enableBtn = (button) => {
   button.disabled = false;
-  button.style.backgroundColor = "#7f6aee";
+  button.style.backgroundColor = "#97D2FD";
   button.style.cursor = "pointer";
 }
 
 export const disableBtn = (button) => {
   button.disabled = true;
-  button.style.backgroundColor = "#aca0eb";
+  button.style.backgroundColor = "#8fc1e5ff";
+}
+
+export const getFilePath = (fileName) => {
+    return `${API_IMAGE_URL}/${fileName}`;
 }
 
 export const getCurrentUser = async() => {
@@ -37,12 +41,10 @@ export const checkAuthAndRedirect = async() => {
     if(user){
         return user;
     }else{
-        alert("로그인이 필요합니다.");
         window.location.href = '/auth/login';
         return;
     }
 }
-
 
 export const logout = async() => {
     try{
@@ -58,12 +60,7 @@ export const logout = async() => {
         }
 
         const {message} = await response.json();
-        alert(message);
     }catch(error){
         console.error(error);
     }
 }
-
-export const getFilePath = (fileName) => {
-    return `${API_IMAGE_URL}/${fileName}`;
-  }
