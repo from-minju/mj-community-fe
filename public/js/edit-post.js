@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./config.js";
+import { config } from "./config.js";
 import { checkAuthAndRedirect, disableBtn, enableBtn } from "./utils.js";
 import { CONTENT_MAX, TITLE_MAX, validatePostContent, validateTitle } from "./validation.js";
 
@@ -87,7 +87,7 @@ function displayPostDetail(post) {
 
 async function fetchPostDetail() {
   try {
-    const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
+    const response = await fetch(`${config.API_BASE_URL}/posts/${postId}`, {
       method: "GET",
       credentials: "include"
     });
@@ -115,7 +115,7 @@ function deleteImage() {
 }
 
 async function editPost() {
-  const API_URL = `${API_BASE_URL}/posts/${postId}`;
+  const API_URL = `${config.API_BASE_URL}/posts/${postId}`;
   const postData = new FormData();
   postData.append("title", titleInput.value.trim());
   postData.append("content", contentInput.value.trim());

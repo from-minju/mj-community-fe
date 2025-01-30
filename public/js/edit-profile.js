@@ -1,4 +1,4 @@
-import { API_BASE_URL, API_IMAGE_URL } from "./config.js";
+import { config } from "./config.js";
 import { fetchUserProfileDropdown } from "./dropdown.js";
 import { checkAuthAndRedirect, disableBtn, enableBtn, getCurrentUser } from "./utils.js";
 
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     // 프로필 수정 
     async function editProfile(){
-        const API_URL = `${API_BASE_URL}/users/profile`;
+        const API_URL = `${config.API_BASE_URL}/users/profile`;
         const formData = new FormData();
         formData.append('nickname', nicknameInput.value.trim());
         formData.append('isProfileImageChanged', isProfileImageChanged);
@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function(){
         email.textContent = user.email;
         nicknameInput.value = user.nickname;
         if(user.profileImage){
-            profileImagePreview.src = `${API_IMAGE_URL}/${user.profileImage}`;
+            profileImagePreview.src = `${config.API_IMAGE_URL}/${user.profileImage}`;
         }
     }
 
@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function(){
      * 모달창
      */
     async function deleteAccount() {
-        const API_URL = `${API_BASE_URL}/users`;
+        const API_URL = `${config.API_BASE_URL}/users`;
 
         try{
             // 회원탈퇴 (회원의 모든 정보 삭제)

@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./config.js";
+import { config } from "./config.js";
 import { enableBtn, disableBtn } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
    * 중복 검사
    */
     async function isEmailDuplicates() {
-      const API_URL = `${API_BASE_URL}/users/check-email`;
+      const API_URL = `${config.API_BASE_URL}/users/check-email`;
       const checkEmailData = {
         email: emailInput.value.trim()
       };
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   
     async function isNicknameDuplicates() {
-      const API_URL = `${API_BASE_URL}/users/check-nickname`;
+      const API_URL = `${config.API_BASE_URL}/users/check-nickname`;
       const checkNicknameData = {
         nickname: nicknameInput.value.trim()
       };
@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const API_URL = `${API_BASE_URL}/auth/signup`;
+    const API_URL = `${config.API_BASE_URL}/auth/signup`;
     const signupData = new FormData();
     signupData.append('email', emailInput.value.trim());
     signupData.append('password', passwordInput.value.trim());

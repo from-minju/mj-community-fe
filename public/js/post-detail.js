@@ -1,4 +1,4 @@
-import { API_BASE_URL, API_IMAGE_URL, DefaultProfileImageUrl } from "./config.js";
+import { config } from "./config.js";
 import { enableBtn, disableBtn, checkAuthAndRedirect, getFilePath, getCurrentUser } from "./utils.js";
 import { COMMENT_MAX, validateComment } from "./validation.js";
 
@@ -51,7 +51,7 @@ function deletePost() {
 
   okPostModalBtn.addEventListener("click", async() => {
     try {
-      const API_URL = `${API_BASE_URL}/posts/${postId}`;
+      const API_URL = `${config.API_BASE_URL}/posts/${postId}`;
       const response = await fetch(API_URL, {
         method: "DELETE",
         credentials: "include"
@@ -75,7 +75,7 @@ function deletePost() {
 
 async function deleteComment(commentId) {
   try {
-    const API_URL = `${API_BASE_URL}/posts/${postId}/comments/${commentId}`;
+    const API_URL = `${config.API_BASE_URL}/posts/${postId}/comments/${commentId}`;
     const response = await fetch(API_URL, {
       method: "DELETE",
       credentials: "include"
@@ -143,12 +143,12 @@ function displayPost(post) {
   }
 
   document.querySelector(".postTitle").textContent = post.title;
-  document.getElementById("postWriterProfileImage").src = post.profileImage ? `${API_IMAGE_URL}/${post.profileImage}` : DefaultProfileImageUrl;
+  document.getElementById("postWriterProfileImage").src = post.profileImage ? `${config.API_IMAGE_URL}/${post.profileImage}` : config.DefaultProfileImageUrl;
   document.getElementById("postWriterName").textContent = post.nickname;
   document.querySelector(".createdTime").textContent = post.createdAt;
   document.querySelector(".postContent").textContent = post.content;
   if (post.postImage) {
-    document.querySelector(".postImage").src = `${API_IMAGE_URL}/${post.postImage}`;
+    document.querySelector(".postImage").src = `${config.API_IMAGE_URL}/${post.postImage}`;
   } else {
     document.querySelector(".postImageContainer").style.display = "none";
   }
@@ -202,7 +202,7 @@ function displayComments(comments) {
 
 
     // 컨테이너 구성하기
-    userProfile.src = comment.profileImage ? getFilePath(comment.profileImage) : DefaultProfileImageUrl;
+    userProfile.src = comment.profileImage ? getFilePath(comment.profileImage) : config.DefaultProfileImageUrl;
     writerName.textContent = comment.nickname;
     createdTime.textContent = comment.createdAt;
     commentContent.textContent = comment.content;
@@ -251,7 +251,7 @@ function displayComments(comments) {
 async function fetchPost() {
 
   try {
-    const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
+    const response = await fetch(`${config.API_BASE_URL}/posts/${postId}`, {
       method: "GET",
       credentials: "include"
     });
@@ -275,7 +275,7 @@ async function fetchComments() {
 
   try {
     const response = await fetch(
-      `${API_BASE_URL}/posts/${postId}/comments`,
+      `${config.API_BASE_URL}/posts/${postId}/comments`,
       {
         method: "GET",
         credentials: "include"
@@ -305,7 +305,7 @@ async function updateLikesBtn() {
   const isLiked = likesBtn.classList.contains('liked');
 
   try{
-    const response = await fetch(`${API_BASE_URL}/posts/${postId}/likes`, {
+    const response = await fetch(`${config.API_BASE_URL}/posts/${postId}/likes`, {
       method: isLiked ? 'DELETE' : 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include'
@@ -353,8 +353,8 @@ async function createOrEditComment() {
   if (!commentTextArea.value.trim()) return;
 
   const API_URL = !editingCommentId
-    ? `${API_BASE_URL}/posts/${postId}/comments`
-    : `${API_BASE_URL}/posts/${postId}/comments/${editingCommentId}`;
+    ? `${config.API_BASE_URL}/posts/${postId}/comments`
+    : `${config.API_BASE_URL}/posts/${postId}/comments/${editingCommentId}`;
 
   const method = !editingCommentId ? "POST" : "PUT";
   const commentData = {

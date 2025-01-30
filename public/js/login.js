@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./config.js";
+import { config } from "./config.js";
 import { enableBtn, disableBtn } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     async function login(){
-        const API_URL = `${API_BASE_URL}/auth/login`;
+        const API_URL = `${config.API_BASE_URL}/auth/login`;
         const loginData = {
             email: emailInput.value.trim(),
             password: passwordInput.value.trim()

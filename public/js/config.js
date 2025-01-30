@@ -1,11 +1,8 @@
-export const HOST = "43.201.63.125";
-// export const HOST = "localhost";
-
-export const PORT = 8000;
-export const BE_PORT = 3000;
-
-export const API_BASE_URL = `http://${HOST}:${BE_PORT}/api`;
-
-export const API_IMAGE_URL = `http://${HOST}:${BE_PORT}/uploads`
-
-export const DefaultProfileImageUrl = "/images/default-profile-image.png"
+export const config = {
+  "HOST": "localhost",
+  "PORT": "8000",
+  "BE_PORT": "3000",
+  "API_BASE_URL": "http://localhost:3000/api",
+  "API_IMAGE_URL": "http://localhost:3000/uploads",
+  "DEFAULT_PROFILE_IMAGE_URL": "/images/default-profile-image.png"
+};
