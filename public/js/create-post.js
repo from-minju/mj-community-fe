@@ -1,4 +1,5 @@
 import { config } from "./config.js";
+import { uploadImageToS3 } from "./upload.js";
 import { checkAuthAndRedirect, disableBtn, enableBtn } from "./utils.js";
 import { CONTENT_MAX, TITLE_MAX, validatePostContent, validateTitle } from "./validation.js";
 
@@ -49,20 +50,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     async function createPost() {
-        const API_URL = `${config.API_BASE_URL}/posts`;
-        const postData = new FormData();
-        postData.append('title', titleInput.value.trim());
-        postData.append('content', contentInput.value.trim());
-
-        if(postImageInput.files[0]){
-            postData.append('postImage', postImageInput.files[0]);
-        }
-
+        let uploadedFilePath = null;
         try{
+            if(postImageInput.files[0]){
+                uploadedFilePath = await uploadImageToS3(postImageInput.files[0]);
+                if (uploadedFilePath) {
+                    console.log("파일이 성공적으로 업로드되었습니다:", uploadedFilePath);
+                }
+            }
+
+            const postData = {
+                title: titleInput.value.trim(),
+                content: contentInput.value.trim(),
+                postImage: uploadedFilePath
+            }
+    
+            const API_URL = `${config.API_BASE_URL}/posts`;
             const response = await fetch(API_URL, {
                 method: "POST",
                 credentials: "include",
-                body: postData
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(postData)
             });
 
             if(!response.ok){

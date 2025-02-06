@@ -16,7 +16,7 @@ const resolvedConfig = {
     PORT: process.env.PORT,
     BE_PORT: process.env.BE_PORT,
     API_BASE_URL: `http://${process.env.HOST}:${process.env.BE_PORT}/api`,
-    API_IMAGE_URL: `http://${process.env.HOST}:${process.env.BE_PORT}/uploads`,
+    API_IMAGE_URL: `${process.env.API_IMAGE_URL}`,
     DefaultProfileImageUrl: process.env.DEFAULT_PROFILE_IMAGE_URL
 };
 
