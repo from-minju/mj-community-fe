@@ -54,9 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
         try{
             if(postImageInput.files[0]){
                 uploadedFilePath = await uploadImageToS3(postImageInput.files[0]);
-                if (uploadedFilePath) {
-                    console.log("파일이 성공적으로 업로드되었습니다:", uploadedFilePath);
-                }
             }
 
             const postData = {
