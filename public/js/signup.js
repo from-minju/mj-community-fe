@@ -1,4 +1,5 @@
-import { API_BASE_URL } from "./config.js";
+import { config } from "./config.js";
+import { uploadImageToS3 } from "./upload.js";
 import { enableBtn, disableBtn } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -22,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
    * 중복 검사
    */
     async function isEmailDuplicates() {
-      const API_URL = `${API_BASE_URL}/users/check-email`;
+      const API_URL = `${config.API_BASE_URL}/users/check-email`;
       const checkEmailData = {
         email: emailInput.value.trim()
       };
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   
     async function isNicknameDuplicates() {
-      const API_URL = `${API_BASE_URL}/users/check-nickname`;
+      const API_URL = `${config.API_BASE_URL}/users/check-nickname`;
       const checkNicknameData = {
         nickname: nicknameInput.value.trim()
       };
@@ -252,25 +253,30 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   async function signup() {
+    let uploadedFilePath = null;
+
     if(await isEmailDuplicates() || await isNicknameDuplicates()){
       alert("회원가입 실패: 다시 시도해주세요.")
       return;
     }
 
-    const API_URL = `${API_BASE_URL}/auth/signup`;
-    const signupData = new FormData();
-    signupData.append('email', emailInput.value.trim());
-    signupData.append('password', passwordInput.value.trim());
-    signupData.append('nickname', nicknameInput.value.trim());
-
-    if (profileImageInput.files[0]) {
-        signupData.append('profileImage', profileImageInput.files[0]);
-    }
-
     try{
+      if (profileImageInput.files[0]) {
+        uploadedFilePath = await uploadImageToS3(profileImageInput.files[0]);
+      }
+
+      const signupData = {
+        email: emailInput.value.trim(),
+        password: passwordInput.value.trim(),
+        nickname: nicknameInput.value.trim(),
+        profileImage: uploadedFilePath
+      }
+
+      const API_URL = `${config.API_BASE_URL}/auth/signup`;
       const response = await fetch(API_URL, {
         method: "POST",
-        body: signupData
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(signupData)
       });
 
       const {message} = await response.json();

@@ -3,7 +3,7 @@ import express from 'express';
 // ESM 방식에서 __dirname을 얻는 방법
 import { fileURLToPath } from 'url';
 import path from 'path';
-import { PORT, HOST, BE_PORT } from './public/js/config.js';
+import { config } from './public/js/config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 미들웨어: 로그인 여부 확인
 const checkAuth = async (req, res, next) => {
     try {
-        const API_URL = `http://${HOST}:${BE_PORT}/api/auth/check`; 
+        const API_URL = `http://${config.HOST}:${config.BE_PORT}/api/auth/check`; 
         const response = await fetch(API_URL, {
             method: 'GET',
             credentials: 'include', // 쿠키 포함
@@ -76,6 +76,6 @@ app.get('/posts/:postId/edit', checkAuth, (req, res) => {
 
 
 // 서버 시작
-app.listen(PORT, () => {
-    console.log(`Server is running at http://${HOST}:${PORT}`);
+app.listen(config.PORT, () => {
+    console.log(`Server is running at http://${config.HOST}:${config.PORT}`);
 });

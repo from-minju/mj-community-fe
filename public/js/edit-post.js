@@ -1,4 +1,5 @@
-import { API_BASE_URL } from "./config.js";
+import { config } from "./config.js";
+import { uploadImageToS3 } from "./upload.js";
 import { checkAuthAndRedirect, disableBtn, enableBtn } from "./utils.js";
 import { CONTENT_MAX, TITLE_MAX, validatePostContent, validateTitle } from "./validation.js";
 
@@ -87,7 +88,7 @@ function displayPostDetail(post) {
 
 async function fetchPostDetail() {
   try {
-    const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
+    const response = await fetch(`${config.API_BASE_URL}/posts/${postId}`, {
       method: "GET",
       credentials: "include"
     });
@@ -112,24 +113,32 @@ function deleteImage() {
   imageContainer.style.display = "none";
   isImageDeleted = true;
   isOriginalImageDeleted = true;
+  console.log(isImageDeleted);
+
 }
 
 async function editPost() {
-  const API_URL = `${API_BASE_URL}/posts/${postId}`;
-  const postData = new FormData();
-  postData.append("title", titleInput.value.trim());
-  postData.append("content", contentInput.value.trim());
-  postData.append("isImageDeleted", isImageDeleted);
 
-  if (postImageInput.files[0]) {
-    postData.append("postImage", postImageInput.files[0]);
-  }
+  let uploadedFilePath = null;
 
   try {
+    if (postImageInput.files[0]) {
+      uploadedFilePath = await uploadImageToS3(postImageInput.files[0]);
+    }
+
+    const postData = {
+      title: titleInput.value.trim(),
+      content: contentInput.value.trim(),
+      postImage: uploadedFilePath,
+      isImageDeleted: isImageDeleted
+    }
+    console.log(isImageDeleted);
+    const API_URL = `${config.API_BASE_URL}/posts/${postId}`;
     const response = await fetch(API_URL, {
       method: "PUT",
+      headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: postData,
+      body: JSON.stringify(postData),
     });
 
     const { message } = await response.json();
@@ -140,7 +149,6 @@ async function editPost() {
       );
     }
 
-    console.log(message);
     window.location.href = `/posts/${postId}`;
   } catch (error) {
     console.error(`게시물 수정 실패`, error);

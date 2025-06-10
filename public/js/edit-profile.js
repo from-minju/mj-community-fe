@@ -1,5 +1,6 @@
-import { API_BASE_URL, API_IMAGE_URL } from "./config.js";
+import { config } from "./config.js";
 import { fetchUserProfileDropdown } from "./dropdown.js";
+import { uploadImageToS3 } from "./upload.js";
 import { checkAuthAndRedirect, disableBtn, enableBtn, getCurrentUser } from "./utils.js";
 
 checkAuthAndRedirect();
@@ -23,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function(){
     let isProfileImageChanged = false;
 
     async function isNewNicknameDuplicates() {
-        const API_URL = `${API_BASE_URL}/users/check-nickname`;
+        const API_URL = `${config.API_BASE_URL}/users/check-nickname`;
         const checkNicknameData = {
           nickname: nicknameInput.value.trim()
         };
@@ -128,11 +129,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
     // 프로필 수정 
     async function editProfile(){
-        const API_URL = `${API_BASE_URL}/users/profile`;
-        const formData = new FormData();
-        formData.append('nickname', nicknameInput.value.trim());
-        formData.append('isProfileImageChanged', isProfileImageChanged);
-        formData.append('profileImage', profileImageInput.files[0]);
+
+        let uploadedFilePath = null;
 
         try{
 
@@ -140,11 +138,23 @@ document.addEventListener("DOMContentLoaded", function(){
                 return;
             }
 
+            if(isProfileImageChanged && profileImageInput.files[0]){
+                uploadedFilePath = await uploadImageToS3(profileImageInput.files[0]);
+            }
+
+            const profileData = {
+                nickname: nicknameInput.value.trim(),
+                isProfileImageChanged: isProfileImageChanged,
+                profileImage: uploadedFilePath
+            }
+
+            const API_URL = `${config.API_BASE_URL}/users/profile`;
             const response = await fetch(API_URL, {
                 method: "PUT",
+                headers: { "Content-Type": "application/json" },
                 credentials: 'include',
-                body: formData,
-            })
+                body: JSON.stringify(profileData),
+            });
 
             if(!response.ok){
                 alert("회원정보 수정에 실패하였습니다.");
@@ -165,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function(){
         email.textContent = user.email;
         nicknameInput.value = user.nickname;
         if(user.profileImage){
-            profileImagePreview.src = `${API_IMAGE_URL}/${user.profileImage}`;
+            profileImagePreview.src = `${config.API_IMAGE_URL}/${user.profileImage}`;
         }
     }
 
@@ -173,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function(){
      * 모달창
      */
     async function deleteAccount() {
-        const API_URL = `${API_BASE_URL}/users`;
+        const API_URL = `${config.API_BASE_URL}/users`;
 
         try{
             // 회원탈퇴 (회원의 모든 정보 삭제)

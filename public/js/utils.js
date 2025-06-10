@@ -1,4 +1,4 @@
-import { API_BASE_URL, API_IMAGE_URL } from "./config.js";
+import { config } from "./config.js";
 
 export const enableBtn = (button) => {
   button.disabled = false;
@@ -12,12 +12,12 @@ export const disableBtn = (button) => {
 }
 
 export const getFilePath = (fileName) => {
-    return `${API_IMAGE_URL}/${fileName}`;
+    return `${config.API_IMAGE_URL}/${fileName}`;
 }
 
 export const getCurrentUser = async() => {
     try {
-        const API_URL = `${API_BASE_URL}/auth/check`
+        const API_URL = `${config.API_BASE_URL}/auth/check`
         const response = await fetch(API_URL, {
           method: 'GET',
           credentials: 'include', // 쿠키 포함
@@ -48,7 +48,7 @@ export const checkAuthAndRedirect = async() => {
 
 export const logout = async() => {
     try{
-        const API_URL = `${API_BASE_URL}/auth/logout`
+        const API_URL = `${config.API_BASE_URL}/auth/logout`
         const response = await fetch(API_URL, {
             method: 'POST',
             credentials: 'include',

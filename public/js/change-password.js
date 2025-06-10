@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./config.js";
+import { config } from "./config.js";
 import { checkAuthAndRedirect, disableBtn, enableBtn } from "./utils.js";
 
 checkAuthAndRedirect();
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function(){
             return false;
         }
 
-        const API_URL = `${API_BASE_URL}/users/profile/password`;
+        const API_URL = `${config.API_BASE_URL}/users/profile/password`;
         const newPasswordData = {
             password: passwordInput.value.trim()
         }

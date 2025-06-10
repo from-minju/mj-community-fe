@@ -1,10 +1,8 @@
-export const HOST = "localhost";
-
-export const PORT = 8000;
-export const BE_PORT = 3000;
-
-export const API_BASE_URL = `http://${HOST}:${BE_PORT}/api`;
-
-export const API_IMAGE_URL = `http://${HOST}:${BE_PORT}/uploads`
-
-export const DefaultProfileImageUrl = "/images/default-profile-image.png"
+export const config = {
+  "HOST": "13.125.101.228",
+  "PORT": "8000",
+  "BE_PORT": "3000",
+  "API_BASE_URL": "http://13.125.101.228:3000/api",
+  "API_IMAGE_URL": "https://d3mgroqhwpj2k3.cloudfront.net",
+  "DefaultProfileImageUrl": "/images/default-profile-image.png"
+};
