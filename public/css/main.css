@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Kirang+Haerang&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Darumadrop+One&display=swap');
 
 :root {
     --maincolor: #97D2FD;
@@ -7,7 +7,7 @@
     --backcolor: #f4f5f7; 
     --hovergray: #e9e9e9;
 
-    --mainfont: "Kirang Haerang", Arial;
+    --mainfont: "Darumadrop One", Arial;
     --secondfont:  Arial;
 }
 
