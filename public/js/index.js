@@ -90,9 +90,9 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // 통계 정보를 이모지와 함께 표시
         leftArea.innerHTML = `
-          <span>❤️ ${formatCnt(post.likes)}</span>
-          <span>💬 ${formatCnt(post.comments)}</span>
-          <span>👀 ${formatCnt(post.views)}</span>
+          <span>❤️ 좋아요 ${formatCnt(post.likes)}</span>
+          <span>💬 댓글수 ${formatCnt(post.comments)}</span>
+          <span>👀 조회수 ${formatCnt(post.views)}</span>
         `;
         
         rightArea.textContent = post.createdAt;
