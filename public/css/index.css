@@ -1,109 +1,191 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
-div {
-    display: block;
+.introContainer {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInUp 1s ease-out;
 }
 
-.introContainer{
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: space-between;
-    margin-top: 30px;
-    margin-bottom: 20px;
-    font-size: 22px;
-    line-height: 31.2px;
-    font-family: 'Pretendard', sans-serif;
+.welcome-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    line-height: 1.2;
+}
+
+.welcome-subtitle {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+    animation: fadeInUp 1s ease-out 0.2s both;
 }
 
 .buttonContainer {
-    margin-left: auto; /* buttonContainer를 오른쪽으로 밀기 */
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+    animation: fadeInUp 1s ease-out 0.4s both;
+    width: 100%;
 }
 
 .createPostBtn {
-    background-color: var(--maincolor);
-    border-radius: 16px;
-    color: white;
-    height: 44px;
-    width: 130px;
+    background: var(--secondary);
     border: none;
-    font-size: 16px;
-    font-weight: 500;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+    text-decoration: none;
+    display: inline-block;
     font-family: var(--secondfont);
 }
 
 .createPostBtn:hover {
-    background-color: var(--hovercolor);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+    filter: brightness(1.1);
+    background: var(--hovercolor);
 }
 
 .postsContainer {
     width: 100%;
-    margin-top: 10px;
+    display: grid;
+    gap: 1.5rem;
+    animation: fadeInUp 1s ease-out 0.6s both;
 }
 
 .postContainer {
-    background-color: #FFFFFF;
-    width: 100%;
-    border-radius: 16px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    margin: 12px 0px;
-    padding-top: 20px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2rem;
     cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: var(--card-shadow);
+    width: 100%;
 }
 
 .postContainer:hover {
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3); /* hover 시 그림자 확대 */
-    transform: translateY(-5px); /* 약간 위로 이동 */
-}
-
-
-.postTitleArea,
-.postMetaArea,
-.postWriterArea {
-    margin: 0px 20px;
+    transform: translateY(-8px);
+    box-shadow: var(--card-hover-shadow);
+    background: rgba(255, 255, 255, 0.35);
 }
 
 .postTitleArea {
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: 700;
-    white-space: nowrap; /* 줄바꿈 방지 */
-    overflow: hidden; /* 넘치는 부분 숨김 */
-    text-overflow: ellipsis; /* 생략기호추가 */
-    margin-bottom: 15px;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .postMetaArea {
-    display: flex;   
-    justify-content: space-between; /* 좌우 공간을 균등하게 배분, 좌측우측정렬 */
-    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     font-size: 14px;
 }
 
-hr {
-    margin: 0px;
+.leftArea {
+    display: flex;
+    gap: 1rem;
+    color: var(--text-secondary);
+}
+
+.leftArea span {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.rightArea {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
 }
 
 .postWriterArea {
     display: flex;
-    align-items: center; 
+    align-items: center;
+    gap: 0.75rem;
     font-size: 15px;
     font-weight: 700;
-    padding-top: 5px;
-    padding-bottom: 7px;
 }
 
 .postWriterArea p {
-    padding-left: 13px;
+    margin: 0;
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
 .postUserProfile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    object-fit: cover;
     background-color: var(--darkgray);
     background-size: cover;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    height: 36px;
-    position: relative;
-    width: 36px;
-    object-fit: cover;
+}
+
+/* Scroll animations */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.animate-on-scroll.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .welcome-title {
+        font-size: 2rem;
+    }
+
+    .welcome-subtitle {
+        font-size: 1rem;
+    }
+
+    .postContainer {
+        padding: 1.5rem;
+    }
+
+    .postTitleArea {
+        font-size: 1.25rem;
+    }
+
+    .postMetaArea {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .leftArea {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .buttonContainer {
+        justify-content: center;
+    }
+
+    .createPostBtn {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
+    }
 }

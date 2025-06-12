@@ -1,32 +1,34 @@
 import { config } from "./config.js";
 import { logout } from "./utils.js";
 
-const loginDropdown = document.getElementById("loginDropdown");
-const signupDropdown = document.getElementById("signupDropdown");
-const editProfileDropdown = document.getElementById("editProfileDropdown");
-const changePasswordDropdown = document.getElementById("changePasswordDropdown");
-const logoutDropdown = document.getElementById("logoutDropdown");
+// 드롭다운 메뉴 관련 요소들
+const userProfileImage = document.getElementById('userProfileImg');
+const dropdown = document.getElementById('dropdown');
 
-const userProfileImage = document.getElementById("userProfileImg");
-
+// 드롭다운 옵션 요소들
+const loginOption = document.getElementById('loginDropdown');
+const signupOption = document.getElementById('signupDropdown');
+const editProfileOption = document.getElementById('editProfileDropdown');
+const changePasswordOption = document.getElementById('changePasswordDropdown');
+const logoutOption = document.getElementById('logoutDropdown');
 
 
 const showLoginStatusBtn = () => {
-    loginDropdown.style.display = "none";
-    signupDropdown.style.display = "none";
+    loginOption.style.display = "none";
+    signupOption.style.display = "none";
 
-    editProfileDropdown.style.display = "block";
-    changePasswordDropdown.style.display = "block";
-    logoutDropdown.style.display = "block";
+    editProfileOption.style.display = "block";
+    changePasswordOption.style.display = "block";
+    logoutOption.style.display = "block";
 }
 
 const showLogoutStatusBtn = () => {
-    loginDropdown.style.display = "block";
-    signupDropdown.style.display = "block";
+    loginOption.style.display = "block";
+    signupOption.style.display = "block";
 
-    editProfileDropdown.style.display = "none";
-    changePasswordDropdown.style.display = "none";
-    logoutDropdown.style.display = "none";
+    editProfileOption.style.display = "none";
+    changePasswordOption.style.display = "none";
+    logoutOption.style.display = "none";
 }
 
 
@@ -63,18 +65,21 @@ export const fetchUserProfileDropdown = async() => {
  */
 
 // 드롭다운
-document.getElementById("userProfileImg").addEventListener("click", function () {
-    dropdown.style.display =
-      dropdown.style.display === "block" ? "none" : "block";
+userProfileImage.addEventListener("click", function (e) {
+    e.stopPropagation();
+      dropdown.classList.toggle('show');
 });
 
 // 드롭다운 외부 클릭 시 메뉴 숨기기
-document.addEventListener("click", function (event) {
-  if (
-    !dropdown.contains(event.target) && !userProfileImg.contains(event.target)
-  ) {
-    dropdown.style.display = "none"; // 드롭다운 숨기기
-  }
+document.addEventListener("click", function (e) {
+    if (!dropdown.contains(e.target) && e.target !== userProfileImg) {
+        dropdown.classList.remove('show');
+      }
+});
+
+// 드롭다운 내부 클릭 시 이벤트 전파 방지
+dropdown.addEventListener('click', function(e) {
+    e.stopPropagation();
 });
 
 // 이전 페이지
@@ -104,6 +109,32 @@ logoutDropdown.addEventListener("click", () => {
     window.location.href = '/';
 });
 
+
+
+
+// ESC 키로 드롭다운 닫기
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        dropdown.classList.remove('show');
+    }
+});
+
+// 드롭다운 애니메이션 효과를 위한 추가 기능
+const dropdownOptions = document.querySelectorAll('.dropdownOption');
+
+dropdownOptions.forEach((option, index) => {
+    // 드롭다운이 열릴 때 순차적으로 나타나는 효과
+    option.style.transitionDelay = `${index * 0.05}s`;
+
+    // 호버 효과 개선
+    option.addEventListener('mouseenter', function () {
+        this.style.transform = 'translateX(5px)';
+    });
+
+    option.addEventListener('mouseleave', function () {
+        this.style.transform = 'translateX(0)';
+    });
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchUserProfileDropdown();
